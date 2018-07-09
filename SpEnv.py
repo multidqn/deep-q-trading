@@ -47,5 +47,8 @@ class SpEnv(gym.Env):
         # se avevo già fatto un'azione (LONG, SHORT), mi calcolo il reward
         return #stato, reward, done, info
 
+    def getCurrentState(self):
+        return self.currentState
+
     def reset(self):
         return
