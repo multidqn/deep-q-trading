@@ -45,7 +45,12 @@ class SpEnv(gym.Env):
         # se ho fatto BUY, mi segno il nuovo INTERNAL_STATE e mi segno quanto ho speso
         # se ho fatto SELL, mi segno il nuovo INTERNAL_STATE e mi segno quanto ho speso
         # se avevo già fatto un'azione (LONG, SHORT), mi calcolo il reward
-        return #stato, reward, done, info
+        # lo stato sarà strutturato:
+        currentValue = self.history[self.currentObservation]['Value']
+        currentTime = self.history[self.currentObservation]['Time']
+        reward = 0
+        done = False
+        return (numpy.array([currentValue,currentTime]) , numpy.array([self.getCurrentState()]), reward, done, {})
 
     def getCurrentState(self):
         return self.currentState
