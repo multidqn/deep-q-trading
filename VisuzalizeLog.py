@@ -11,4 +11,4 @@ def visualize_log(filename, figsize=None, output=None):
     plt.grid()
     plt.show()
 
-visualize_log("LunarLander.json")
+visualize_log("Intraday.json")
