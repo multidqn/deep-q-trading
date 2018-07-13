@@ -53,5 +53,5 @@ class IntradayPolicy(Policy):
         config['eps'] = self.eps
         return config
 
-def getPolicy(env):
-    return IntradayPolicy(env)
+def getPolicy(env, eps):
+    return IntradayPolicy(env, eps)
