@@ -9,9 +9,12 @@ from rl.memory import SequentialMemory
 from rl.policy import EpsGreedyQPolicy
 from rl.callbacks import FileLogger
 
-environment = SpEnv.getEnv()
+
+#842063
+environment = SpEnv.getEnv(maxLimit = 842063)
+testEnv = SpEnv.getEnv(minLimit = 842063, verbose=True)
 nb_actions = environment.action_space.n
-print(environment.observation_space.shape)
+#print(environment.observation_space.shape)
 
 model = Sequential()
 model.add(Flatten(input_shape=(100,) + environment.observation_space.shape))
@@ -27,14 +30,29 @@ model.add(Activation('linear'))
 
 
 policy = IntradayPolicy.getPolicy(env = environment, eps = 0.5)
-policyTest = IntradayPolicy.getPolicy(env = environment, eps = 0)
-memory = SequentialMemory(limit=1000000, window_length=100)
+policyTest = IntradayPolicy.getPolicy(env = testEnv, eps = 0)
+memory = SequentialMemory(limit=100000, window_length=100)
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=200,
 target_model_update=1e-2, policy=policy, test_policy=policyTest)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
-dqn.load_weights("Q.weights")
-dqn.fit(environment, nb_steps=200000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
-dqn.save_weights("Q.weights", overwrite=True)
-dqn.test(environment, nb_episodes=1000, visualize=False)
+"""
+while 1:
 
-print(environment.limit)
+    dqn.load_weights("Q.weights")
+
+    policy.set_eps(0.5)
+    dqn.fit(environment, nb_steps=2000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
+    dqn.save_weights("Q.weights", overwrite=True)
+
+
+    policy.set_eps(0.1)
+    dqn.fit(environment, nb_steps=20000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
+    dqn.save_weights("Q.weights", overwrite=True)
+
+
+    policy.set_eps(0.07)
+    dqn.fit(environment, nb_steps=200000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
+    dqn.save_weights("Q.weights", overwrite=True)
+"""
+dqn.load_weights("Q.weights")
+dqn.test(testEnv, nb_episodes=671, verbose=0, visualize=False)

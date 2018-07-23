@@ -3,10 +3,11 @@ import SpEnv
 import numpy
 
 class IntradayPolicy(Policy):
-    def __init__(self, env, eps=.1):
+    def __init__(self, env, eps=.1, stopLoss = -500):
         super(IntradayPolicy, self).__init__()
         self.env = env
         self.eps = eps
+        self.stopLoss = stopLoss
 
     def select_action(self, q_values):
         assert q_values.ndim == 1
@@ -41,7 +42,12 @@ class IntradayPolicy(Policy):
                 action = 2
             else:
                 action = 1
-        
+
+        if self.env.getProfit() <= self.stopLoss:
+            if self.env.getCurrentState() == 1:
+                action = 2
+            elif self.env.getCurrentState() == 2:
+                action = 1
         return action
 
     def get_config(self):
@@ -53,5 +59,8 @@ class IntradayPolicy(Policy):
         config['eps'] = self.eps
         return config
 
-def getPolicy(env, eps):
-    return IntradayPolicy(env, eps)
+    def set_eps(self, eps):
+        self.eps = eps
+
+def getPolicy(env, eps, stopLoss = -500):
+    return IntradayPolicy(env, eps, stopLoss)

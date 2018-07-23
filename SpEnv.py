@@ -6,18 +6,28 @@ class SpEnv(gym.Env):
     
     continuous = False
 
-    def __init__(self):
-        spTimeserie = pandas.read_csv('sp500.csv')
+    def __init__(self, minLimit=None, maxLimit=None, verbose=False):
+        self.verbose = verbose
+        if(verbose):
+            print("Episode,Date,Reward,Operation,PriceIn,TimeIn,PriceOut,TimeOut,Steps,Capital,AvgRw,MaxRw,MinRw")
+        spTimeserie = pandas.read_csv('sp500.csv')[minLimit:maxLimit]
         dates = spTimeserie.ix[:, 'Date'].tolist()
         timeT = spTimeserie.ix[:, 'Time'].tolist()
         Open = spTimeserie.ix[:, 'Open'].tolist()
         close = spTimeserie.ix[:, 'Close'].tolist()
-        print(spTimeserie.size)
-        print(len(dates))
-        print(len(timeT))
-        print(len(Open))
-        print(len(close))
+        #print(spTimeserie.size)
+        self.operation = 0
+        self.totalReward = 0
+        self.timeFirst = ""
+        self.timeSecond = ""
+        self.priceFirst = 0
+        self.priceSecond = 0
+        self.episodeReward = 0
+        self.episodeSteps = 0
+        self.maxEp = 0
+        self.minEp = 0
         values = []
+        self.episode = 1
         self.done = False
         self.currentState = 0 # (0 = nothing) (1 = long) (2 = short)
         self.currentValue = 0
@@ -29,14 +39,14 @@ class SpEnv(gym.Env):
             time.append(sum(x * int(t) for x, t in zip([3600, 60], t.split(":")))) 
         for i in range(0,self.limit): # i use this to create my states (as dictionaries)
             values.append(close[i]-Open[i])
-            self.history.append({'Date' : dates[i],'Time' : time[i], 'Value' : close[i]-Open[i], 'Open': Open[i] })
-        print(len(self.history))
+            self.history.append({'Date' : dates[i],'TimeT' : timeT[i],'Time' : time[i], 'Value' : close[i]-Open[i], 'Open': Open[i] })
+        #print(len(self.history))
         self.minValue = min(values)
         self.maxValue = max(values)
         self.minTime = min(time)
         self.maxTime = max(time)
-        self.low = numpy.array([self.minValue, self.minTime])
-        self.high = numpy.array([self.maxValue, self.maxTime])
+        self.low = numpy.array([self.minValue, self.minTime, 0])
+        self.high = numpy.array([self.maxValue, self.maxTime, 2])
         self.action_space = gym.spaces.Discrete(3) # the action space is just 0,1,2 which means hold,buy,sell
         self.observation_space = gym.spaces.Box(self.low, self.high)
         # we clean our memory #
@@ -44,26 +54,38 @@ class SpEnv(gym.Env):
         del(Open)             #
         del(close)            #
         del(spTimeserie)      #
+        del(time)             #
+        del(timeT)            #
         del(values)           #
         #######################
 
     def step(self, action):
         if self.currentState == 0: # NONE
+            self.operation = action
             self.currentState = action
             reward = 0
             self.done = False
             if action == 1:
                 self.currentValue = -self.history[self.currentObservation]['Open']
+                self.priceFirst = self.history[self.currentObservation]['Open']
+                self.timeFirst = self.history[self.currentObservation]['TimeT']
+                reward-=1
             elif action == 2:
                 self.currentValue = self.history[self.currentObservation]['Open']
+                self.priceFirst = self.history[self.currentObservation]['Open']
+                self.timeFirst = self.history[self.currentObservation]['TimeT']
+                reward-=1
             else:
                 self.currentValue = 0
+                
         elif self.currentState == 1:# LONG
             if action == 0:
                 reward = 0
                 self.done = False
             elif action == 2:
-                reward = self.currentValue + self.history[self.currentObservation]['Open']
+                reward = (self.currentValue + self.history[self.currentObservation]['Open'])*50 -1
+                self.priceSecond = self.history[self.currentObservation]['Open']
+                self.timeSecond = self.history[self.currentObservation]['TimeT']
                 self.done = True
                 self.currentState = 0
             else:
@@ -75,7 +97,9 @@ class SpEnv(gym.Env):
                 reward = 0
                 self.done = False
             elif action == 1:
-                reward = self.currentValue - self.history[self.currentObservation]['Open']
+                reward = (self.currentValue - self.history[self.currentObservation]['Open'])*50 - 1
+                self.priceSecond = self.history[self.currentObservation]['Open']
+                self.timeSecond = self.history[self.currentObservation]['TimeT']
                 self.done = True
                 self.currentState = 0
             else:
@@ -92,14 +116,20 @@ class SpEnv(gym.Env):
 
         currentValue = self.history[self.currentObservation]['Value']
         currentTime = self.history[self.currentObservation]['Time']
-        state = [currentValue, currentTime]
+        state = [currentValue, currentTime, self.currentState]
         state = numpy.array(state)
         if not self.done:
             self.currentObservation+=1
             self.currentObservation%=self.limit
         #print(str(self.currentObservation) + "  -  " + str(self.limit))
-
-        return state, reward*50, self.done, {}
+        self.episodeReward += reward
+        self.totalReward += reward
+        self.episodeSteps += 1
+        if self.minEp > reward:
+            self.minEp = reward
+        if self.maxEp < reward:
+            self.maxEp = reward
+        return state, reward, self.done, {}
 
     def getCurrentState(self):
         return self.currentState
@@ -119,11 +149,44 @@ class SpEnv(gym.Env):
         self.currentState = 0
         currentValue = self.history[self.currentObservation]['Value']
         currentTime = self.history[self.currentObservation]['Time']
-        state = [currentValue,currentTime]
+        state = [currentValue,currentTime,self.currentState]
         state = numpy.array(state)
         #print("RESETTING")
         #print("     -*-" + str(self.currentObservation) + " ---- " + self.history[self.currentObservation]['Date'] + " - " + self.history[self.currentObservation-1]['Date'])
+        if(self.verbose):
+            Episode = self.episode
+            Date = self.history[self.currentObservation]['Date']
+            Reward = self.episodeReward
+            Operation = self.operation
+            PriceIn = self.priceFirst
+            TimeIn = self.timeFirst
+            PriceOut = self.priceSecond
+            TimeOut = self.timeSecond
+            Steps = self.episodeSteps
+            Capital = self.totalReward
+            AvgRw = self.totalReward/self.episode
+            MaxRw = self.maxEp
+            MinRw = self.minEp
+            print(str(Episode)+","+str(Date)+","+str(Reward)+","+str(Operation)+","+str(PriceIn)+","+str(TimeIn)+","+str(PriceOut)+","+str(TimeOut)+","+str(Steps)+","+str(Capital)+","+str(AvgRw)+","+str(MaxRw)+","+str(MinRw))
+        self.episodeReward = 0
+        self.episodeSteps = 0
+        self.timeFirst = ""
+        self.timeSecond = ""
+        self.operation = 0
+        self.episode += 1
+        self.maxEp = 0
+        self.minEp = 0
+        self.priceFirst = 0
+        self.priceSecond = 0
         return state
 
-def getEnv():
-    return SpEnv()
+    def getProfit(self):
+        if(self.currentState == 1):
+            return (self.history[self.currentObservation]['Open']-self.priceFirst)*50
+        elif(self.currentState == 2):
+            return (self.priceFirst-self.history[self.currentObservation]['Open'])*50
+        else:
+            return 0
+
+def getEnv(minLimit=None, maxLimit=None, verbose=False):
+    return SpEnv(minLimit,maxLimit,verbose)
