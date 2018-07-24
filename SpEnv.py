@@ -53,7 +53,7 @@ class SpEnv(gym.Env):
         self.low = numpy.array([self.minValue, self.minTime, 0])
         self.high = numpy.array([self.maxValue, self.maxTime, 2])
         self.action_space = gym.spaces.Discrete(3) # the action space is just 0,1,2 which means hold,buy,sell
-        self.observation_space = gym.spaces.Box(self.low, self.high)
+        self.observation_space = gym.spaces.Box(self.low, self.high, dtype=numpy.float32)
         # we clean our memory #
         del(dates)            #
         del(Open)             #

@@ -35,24 +35,22 @@ memory = SequentialMemory(limit=100000, window_length=100)
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=200,
 target_model_update=1e-2, policy=policy, test_policy=policyTest)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
-"""
-while 1:
-
-    dqn.load_weights("Q.weights")
-
-    policy.set_eps(0.5)
-    dqn.fit(environment, nb_steps=2000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
-    dqn.save_weights("Q.weights", overwrite=True)
 
 
-    policy.set_eps(0.1)
-    dqn.fit(environment, nb_steps=20000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
-    dqn.save_weights("Q.weights", overwrite=True)
-
-
-    policy.set_eps(0.07)
-    dqn.fit(environment, nb_steps=200000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
-    dqn.save_weights("Q.weights", overwrite=True)
-"""
 dqn.load_weights("Q.weights")
+
+policy.set_eps(0.5)
+dqn.fit(environment, nb_steps=2000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
+dqn.save_weights("Q.weights", overwrite=True)
+
+
+policy.set_eps(0.1)
+dqn.fit(environment, nb_steps=20000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
+dqn.save_weights("Q.weights", overwrite=True)
+
+
+policy.set_eps(0.07)
+dqn.fit(environment, nb_steps=200000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
+dqn.save_weights("Q.weights", overwrite=True)
+
 dqn.test(testEnv, nb_episodes=671, verbose=0, visualize=False)
