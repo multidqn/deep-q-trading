@@ -41,6 +41,8 @@ dqn.load_weights("Q.weights")
 
 for i in range(5):
     
+    print(i)
+    
     policy.set_eps(0.5)
     dqn.fit(environment, nb_steps=2000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=0)
     dqn.save_weights("Q.weights", overwrite=True)
