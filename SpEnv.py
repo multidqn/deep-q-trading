@@ -6,8 +6,9 @@ class SpEnv(gym.Env):
     
     continuous = False
 
-    def __init__(self, minLimit=None, maxLimit=None, verbose=False):
+    def __init__(self, minLimit=None, maxLimit=None, verbose=False, operationCost = 0):
         self.verbose = verbose
+        self.operationCost = operationCost
         if(verbose):
             print("Episode,Date,Reward,Operation,PriceIn,TimeIn,PriceOut,TimeOut,Steps,Capital,AvgRw,MaxRw,MinRw,hit,miss,hold,long,short")
         spTimeserie = pandas.read_csv('sp500.csv')[minLimit:maxLimit]
@@ -74,12 +75,12 @@ class SpEnv(gym.Env):
                 self.currentValue = -self.history[self.currentObservation]['Open']
                 self.priceFirst = self.history[self.currentObservation]['Open']
                 self.timeFirst = self.history[self.currentObservation]['TimeT']
-                reward-=1
+                reward-= self.operationCost
             elif action == 2:
                 self.currentValue = self.history[self.currentObservation]['Open']
                 self.priceFirst = self.history[self.currentObservation]['Open']
                 self.timeFirst = self.history[self.currentObservation]['TimeT']
-                reward-=1
+                reward-= self.operationCost
             else:
                 self.currentValue = 0
                 
@@ -88,7 +89,7 @@ class SpEnv(gym.Env):
                 reward = 0
                 self.done = False
             elif action == 2:
-                reward = (self.currentValue + self.history[self.currentObservation]['Open'])*50 -1
+                reward = (self.currentValue + self.history[self.currentObservation]['Open'])*50 - self.operationCost
                 self.priceSecond = self.history[self.currentObservation]['Open']
                 self.timeSecond = self.history[self.currentObservation]['TimeT']
                 self.done = True
@@ -102,7 +103,7 @@ class SpEnv(gym.Env):
                 reward = 0
                 self.done = False
             elif action == 1:
-                reward = (self.currentValue - self.history[self.currentObservation]['Open'])*50 - 1
+                reward = (self.currentValue - self.history[self.currentObservation]['Open'])*50 - self.operationCost
                 self.priceSecond = self.history[self.currentObservation]['Open']
                 self.timeSecond = self.history[self.currentObservation]['TimeT']
                 self.done = True
