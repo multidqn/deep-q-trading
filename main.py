@@ -29,8 +29,8 @@ model.add(Activation('linear'))
 #print(model.summary())
 
 
-policy = IntradayPolicy.getPolicy(env = environment, eps = 0.5)
-policyTest = IntradayPolicy.getPolicy(env = testEnv, eps = 0)
+policy = IntradayPolicy.getPolicy(env = environment, eps = 0.5, stopLoss=-500, minOperationLength=5)
+policyTest = IntradayPolicy.getPolicy(env = testEnv, eps = 0, stopLoss=-500, minOperationLength=5)
 memory = SequentialMemory(limit=100000, window_length=100)
 dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=200,
 target_model_update=1e-2, policy=policy, test_policy=policyTest)

@@ -9,7 +9,7 @@ class SpEnv(gym.Env):
     def __init__(self, minLimit=None, maxLimit=None, verbose=False):
         self.verbose = verbose
         if(verbose):
-            print("Episode,Date,Reward,Operation,PriceIn,TimeIn,PriceOut,TimeOut,Steps,Capital,AvgRw,MaxRw,MinRw")
+            print("Episode,Date,Reward,Operation,PriceIn,TimeIn,PriceOut,TimeOut,Steps,Capital,AvgRw,MaxRw,MinRw,hit,miss,hold,long,short")
         spTimeserie = pandas.read_csv('sp500.csv')[minLimit:maxLimit]
         dates = spTimeserie.ix[:, 'Date'].tolist()
         timeT = spTimeserie.ix[:, 'Time'].tolist()
@@ -17,6 +17,11 @@ class SpEnv(gym.Env):
         close = spTimeserie.ix[:, 'Close'].tolist()
         #print(spTimeserie.size)
         self.operation = 0
+        self.nbHold = 0
+        self.nbLong = 0
+        self.nbShort = 0
+        self.nbHit = 0
+        self.nbMiss = 0
         self.totalReward = 0
         self.timeFirst = ""
         self.timeSecond = ""
@@ -151,8 +156,19 @@ class SpEnv(gym.Env):
         currentTime = self.history[self.currentObservation]['Time']
         state = [currentValue,currentTime,self.currentState]
         state = numpy.array(state)
-        #print("RESETTING")
-        #print("     -*-" + str(self.currentObservation) + " ---- " + self.history[self.currentObservation]['Date'] + " - " + self.history[self.currentObservation-1]['Date'])
+
+        if self.episodeReward > 0:
+            self.nbHit += 1
+        elif self.episodeReward < 0:
+            self.nbMiss += 1
+        
+        if self.operation == 0:
+            self.nbHold += 1
+        elif self.operation == 1:
+            self.nbLong += 1
+        else:
+            self.nbShort += 1
+
         if(self.verbose):
             Episode = self.episode
             Date = self.history[self.currentObservation]['Date']
@@ -167,7 +183,7 @@ class SpEnv(gym.Env):
             AvgRw = self.totalReward/self.episode
             MaxRw = self.maxEp
             MinRw = self.minEp
-            print(str(Episode)+","+str(Date)+","+str(Reward)+","+str(Operation)+","+str(PriceIn)+","+str(TimeIn)+","+str(PriceOut)+","+str(TimeOut)+","+str(Steps)+","+str(Capital)+","+str(AvgRw)+","+str(MaxRw)+","+str(MinRw))
+            print(str(Episode)+","+str(Date)+","+str(Reward)+","+str(Operation)+","+str(PriceIn)+","+str(TimeIn)+","+str(PriceOut)+","+str(TimeOut)+","+str(Steps)+","+str(Capital)+","+str(AvgRw)+","+str(MaxRw)+","+str(MinRw)+","+str(int(100*(self.nbMiss/self.episode)))+","+str(int(100*(self.nbHit/self.episode)))+","+str(int(100*(self.nbHold/self.episode)))+","+str(int(100*(self.nbLong/self.episode)))+","+str(int(100*(self.nbShort/self.episode))))
         self.episodeReward = 0
         self.episodeSteps = 0
         self.timeFirst = ""

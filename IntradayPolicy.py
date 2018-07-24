@@ -3,13 +3,18 @@ import SpEnv
 import numpy
 
 class IntradayPolicy(Policy):
-    def __init__(self, env, eps=.1, stopLoss = -500):
+    def __init__(self, env, eps=.1, stopLoss = 0, minOperationLength = 0):
         super(IntradayPolicy, self).__init__()
         self.env = env
         self.eps = eps
         self.stopLoss = stopLoss
+        self.prevState = env.getCurrentState()
+        self.minOperationLength = minOperationLength
+        self.waitSteps = 0
 
     def select_action(self, q_values):
+        if self.prevState != self.env.getCurrentState():
+            self.waitSteps = self.minOperationLength
         assert q_values.ndim == 1
         nb_actions = q_values.shape[0]
 
@@ -43,11 +48,27 @@ class IntradayPolicy(Policy):
             else:
                 action = 1
 
-        if self.env.getProfit() <= self.stopLoss:
+        if self.waitSteps > 0:
+            #print("WAITING STEPS " + str(self.waitSteps))
+            action = 0
+            self.waitSteps -= 1
+
+        if (self.stopLoss != 0) and (self.env.getProfit() <= self.stopLoss):
+            #print("STOPPING LOSS")
             if self.env.getCurrentState() == 1:
                 action = 2
             elif self.env.getCurrentState() == 2:
                 action = 1
+
+        
+
+        self.prevState = self.env.getCurrentState()
+
+        if self.env.getCurrentState() == 0:
+            #print("HOLDING")
+            self.waitSteps = 0
+        
+        #print("State: " + str(self.env.getCurrentState()) + "Action: " + str(action))
         return action
 
     def get_config(self):
@@ -62,5 +83,5 @@ class IntradayPolicy(Policy):
     def set_eps(self, eps):
         self.eps = eps
 
-def getPolicy(env, eps, stopLoss = -500):
-    return IntradayPolicy(env, eps, stopLoss)
+def getPolicy(env, eps, stopLoss = 0, minOperationLength = 0):
+    return IntradayPolicy(env, eps, stopLoss, minOperationLength)
