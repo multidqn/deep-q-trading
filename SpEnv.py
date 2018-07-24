@@ -205,5 +205,5 @@ class SpEnv(gym.Env):
         else:
             return 0
 
-def getEnv(minLimit=None, maxLimit=None, verbose=False):
-    return SpEnv(minLimit,maxLimit,verbose)
+def getEnv(minLimit=None, maxLimit=None, verbose=False, operationCost = 0):
+    return SpEnv(minLimit,maxLimit,verbose,operationCost)
