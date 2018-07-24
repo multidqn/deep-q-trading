@@ -38,8 +38,9 @@ dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
 
 dqn.load_weights("Q.weights")
-"""
+
 for i in range(5):
+"""
     policy.set_eps(0.5)
     dqn.fit(environment, nb_steps=2000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=0)
     dqn.save_weights("Q.weights", overwrite=True)
@@ -52,9 +53,9 @@ for i in range(5):
     policy.set_eps(0.07)
     dqn.fit(environment, nb_steps=200000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=0)
     dqn.save_weights("Q.weights", overwrite=True)
-
-    policy.set_eps(0.007)
-    dqn.fit(environment, nb_steps=200000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=0)
-    dqn.save_weights("Q.weights", overwrite=True)
 """
+    policy.set_eps(0.007)
+    dqn.fit(environment, nb_steps=200000, callbacks=[FileLogger("Episodes.json", interval=100)], visualize=False, verbose=2)
+    dqn.save_weights("Q.weights", overwrite=True)
+
 dqn.test(testEnv, nb_episodes=671, verbose=0, visualize=False)
