@@ -10,7 +10,7 @@ class SpEnv(gym.Env):
         self.verbose = verbose
         self.operationCost = operationCost
         if(verbose):
-            print("Episode,Date,Reward,Operation,PriceIn,TimeIn,PriceOut,TimeOut,Steps,Capital,AvgRw,MaxRw,MinRw,hit,miss,hold,long,short")
+            print("Episode,Date,Reward,Operation,PriceIn,TimeIn,PriceOut,TimeOut,Steps,Capital,AvgRw,MaxRw,MinRw,miss,hit,hold,long,short")
         spTimeserie = pandas.read_csv('sp500.csv')[minLimit:maxLimit]
         dates = spTimeserie.ix[:, 'Date'].tolist()
         timeT = spTimeserie.ix[:, 'Time'].tolist()
@@ -45,7 +45,7 @@ class SpEnv(gym.Env):
             time.append(sum(x * int(t) for x, t in zip([3600, 60], t.split(":")))) 
         for i in range(0,self.limit): # i use this to create my states (as dictionaries)
             values.append(close[i]-Open[i])
-            self.history.append({'Date' : dates[i],'TimeT' : timeT[i],'Time' : time[i], 'Value' : close[i]-Open[i], 'Open': Open[i] })
+            self.history.append({'Date' : dates[i],'TimeT' : timeT[i],'Time' : time[i], 'Value' : values[i], 'Open': Open[i] })
         #print(len(self.history))
         self.minValue = min(values)
         self.maxValue = max(values)
@@ -53,7 +53,7 @@ class SpEnv(gym.Env):
         self.maxTime = max(time)
         self.low = numpy.array([self.minValue, self.minTime, 0])
         self.high = numpy.array([self.maxValue, self.maxTime, 2])
-        self.action_space = gym.spaces.Discrete(3) # the action space is just 0,1,2 which means hold,buy,sell
+        self.action_space = gym.spaces.Discrete(3) # the action space is just 0,1,2 which means nop,buy,sell
         self.observation_space = gym.spaces.Box(self.low, self.high, dtype=numpy.float32)
         # we clean our memory #
         del(dates)            #
