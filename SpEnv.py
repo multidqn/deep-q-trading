@@ -10,7 +10,7 @@ class SpEnv(gym.Env):
         self.verbose = verbose
         self.operationCost = operationCost
         if(verbose):
-            print("Episode,Date,Reward,Operation,PriceIn,TimeIn,PriceOut,TimeOut,Steps,Capital,AvgRw,MaxRw,MinRw,miss,hit,hold,long,short")
+            print("Episode,Date,Operation,Steps,Reward,Capital,missPerc,hitPerc,zeroPerc,IndexIn,TimeIn,IndexOut,TimeOut,hold,long,short,avgRw")
         spTimeserie = pandas.read_csv('sp500.csv')[minLimit:maxLimit]
         dates = spTimeserie.ix[:, 'Date'].tolist()
         timeT = spTimeserie.ix[:, 'Time'].tolist()
@@ -23,6 +23,7 @@ class SpEnv(gym.Env):
         self.nbShort = 0
         self.nbHit = 0
         self.nbMiss = 0
+        self.nbZero = 0
         self.totalReward = 0
         self.timeFirst = ""
         self.timeSecond = ""
@@ -162,6 +163,8 @@ class SpEnv(gym.Env):
             self.nbHit += 1
         elif self.episodeReward < 0:
             self.nbMiss += 1
+        else:
+            self.nbZero += 1
         
         if self.operation == 0:
             self.nbHold += 1
@@ -184,7 +187,8 @@ class SpEnv(gym.Env):
             AvgRw = self.totalReward/self.episode
             MaxRw = self.maxEp
             MinRw = self.minEp
-            print(str(Episode)+","+str(Date)+","+str(Reward)+","+str(Operation)+","+str(PriceIn)+","+str(TimeIn)+","+str(PriceOut)+","+str(TimeOut)+","+str(Steps)+","+str(Capital)+","+str(AvgRw)+","+str(MaxRw)+","+str(MinRw)+","+str(int(100*(self.nbMiss/self.episode)))+","+str(int(100*(self.nbHit/self.episode)))+","+str(int(100*(self.nbHold/self.episode)))+","+str(int(100*(self.nbLong/self.episode)))+","+str(int(100*(self.nbShort/self.episode))))
+            #print(str(Episode)+","+str(Date)+","+str(Reward)+","+str(Operation)+","+str(PriceIn)+","+str(TimeIn)+","+str(PriceOut)+","+str(TimeOut)+","+str(Steps)+","+str(Capital)+","+str(AvgRw)+","+str(MaxRw)+","+str(MinRw)+","+str(int(100*(self.nbMiss/self.episode)))+","+str(int(100*(self.nbHit/self.episode)))+","+str(int(100*(self.nbHold/self.episode)))+","+str(int(100*(self.nbLong/self.episode)))+","+str(int(100*(self.nbShort/self.episode))))
+            print(repr(Episode),",",repr(Date).rjust(9),",",repr(Operation).rjust(1),",",repr(Steps).rjust(3),",",repr(Reward).rjust(7),",",repr(Capital).rjust(7),",",repr(int(100*(self.nbMiss/self.episode))),",",repr(int(100*(self.nbHit/self.episode))),",",repr(int(100*(self.nbZero/self.episode))),",",repr(PriceIn).rjust(7),",",repr(TimeIn),",",repr(PriceOut).rjust(7),",",repr(TimeOut),",",repr(int(100*(self.nbHold/self.episode))),",",repr(int(100*(self.nbLong/self.episode))),",",repr(int(100*(self.nbShort/self.episode))),",","{0:.4f}".format(round(AvgRw,4)))
         self.episodeReward = 0
         self.episodeSteps = 0
         self.timeFirst = ""
