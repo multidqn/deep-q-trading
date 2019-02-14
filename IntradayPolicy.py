@@ -11,7 +11,7 @@ class IntradayPolicy(Policy):
         self.prevState = env.getCurrentState()
         self.minOperationLength = minOperationLength
         self.waitSteps = 0
-
+        
     def select_action(self, q_values):
         if self.prevState != self.env.getCurrentState():
             self.waitSteps = self.minOperationLength
@@ -69,6 +69,9 @@ class IntradayPolicy(Policy):
             self.waitSteps = 0
         
         #print("State: " + str(self.env.getCurrentState()) + "Action: " + str(action))
+        
+        if self.env.getCurrentState() == 3:
+            action = 0
         return action
 
     def get_config(self):
@@ -83,5 +86,5 @@ class IntradayPolicy(Policy):
     def set_eps(self, eps):
         self.eps = eps
 
-def getPolicy(env, eps, stopLoss = 0, minOperationLength = 0):
+def getPolicy(env, eps=0.1, stopLoss = 0, minOperationLength = 0):
     return IntradayPolicy(env, eps, stopLoss, minOperationLength)
