@@ -19,8 +19,8 @@ class SpEnv(gym.Env):
         Close = spTimeserie.ix[:, 'Close'].tolist()
         Volume = spTimeserie.ix[:, 'Volume'].tolist()
 
-        #self.weekData = MergedDataStructure(delta=8,filename="sp500Week.csv")
-        #self.dayData = MergedDataStructure(delta=20,filename="sp500Day.csv")
+        self.weekData = MergedDataStructure(delta=8,filename="sp500Week.csv")
+        self.dayData = MergedDataStructure(delta=20,filename="sp500Day.csv")
         
         
         self.output=False
@@ -61,12 +61,12 @@ class SpEnv(gym.Env):
 
 
 
-        #dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        #weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
+        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
+        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
         
         currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
 
-        #currentData=currentData + dayList + weekList
+        currentData=currentData + dayList + weekList
 
         closeMinusOpen=list(map(lambda x: x["Close"]-x["Open"],currentData))
         high=list(map(lambda x: x["High"],currentData))
@@ -106,12 +106,12 @@ class SpEnv(gym.Env):
                 str(self.possibleGain) + "," + 
                 str((1 if (self.reward>=self.possibleGain and self.reward>=0) else 0)) + "\n")
         
-        #dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        #weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
+        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
+        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
         
         currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
 
-        #currentData=currentData + dayList + weekList
+        currentData=currentData + dayList + weekList
 
         self.currentObservation+=self.nextObservation
         self.currentObservation%=self.limit
