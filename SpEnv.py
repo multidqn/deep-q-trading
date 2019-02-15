@@ -19,8 +19,8 @@ class SpEnv(gym.Env):
         Close = spTimeserie.ix[:, 'Close'].tolist()
         Volume = spTimeserie.ix[:, 'Volume'].tolist()
 
-        self.weekData = MergedDataStructure(delta=8,filename="sp500Week.csv")
-        self.dayData = MergedDataStructure(delta=20,filename="sp500Day.csv")
+        #self.weekData = MergedDataStructure(delta=8,filename="sp500Week.csv")
+        #self.dayData = MergedDataStructure(delta=20,filename="sp500Day.csv")
         
         
         self.output=False
@@ -32,7 +32,7 @@ class SpEnv(gym.Env):
 
         self.low = numpy.array([-numpy.inf])
         self.high = numpy.array([+numpy.inf])
-        self.action_space = spaces.Discrete(2) # the action space is just 0,1 which means nop,buy
+        self.action_space = spaces.Discrete(3) # the action space is just 0,1,2 which means nop,buy,sell
         self.observation_space = spaces.Box(self.low, self.high, dtype=numpy.float32)
 
 
@@ -61,10 +61,12 @@ class SpEnv(gym.Env):
 
 
 
-        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
+        #dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
+        #weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
         
-        currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] + dayList + weekList
+        currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
+
+        #currentData=currentData + dayList + weekList
 
         closeMinusOpen=list(map(lambda x: x["Close"]-x["Open"],currentData))
         high=list(map(lambda x: x["High"],currentData))
@@ -77,9 +79,11 @@ class SpEnv(gym.Env):
             self.nextObservation+=1
 
         self.openValue = self.history[self.currentObservation]['Open']
-        self.possibleGain = (self.closeValue - self.openValue)/self.openValue
+        self.possibleGain = (self.closeValue - self.openValue)*50
         if(action == 1):
-            self.reward = self.possibleGain
+            self.reward = self.possibleGain-self.operationCost
+        elif(action==2):
+            self.reward = (-self.possibleGain)-self.operationCost
         else:
             self.reward = 0
         
@@ -102,10 +106,12 @@ class SpEnv(gym.Env):
                 str(self.possibleGain) + "," + 
                 str((1 if (self.reward>=self.possibleGain and self.reward>=0) else 0)) + "\n")
         
-        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
+        #dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
+        #weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
         
-        currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] + dayList + weekList
+        currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
+
+        #currentData=currentData + dayList + weekList
 
         self.currentObservation+=self.nextObservation
         self.currentObservation%=self.limit

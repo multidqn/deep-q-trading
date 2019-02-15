@@ -23,7 +23,7 @@ trainer = ValidationCallback()
 nb_actions = trainEnv.action_space.n
 
 model = Sequential()
-model.add(Flatten(input_shape=(50,4,68)))
+model.add(Flatten(input_shape=(50,4,40)))
 model.add(Dense(256,activation='linear'))
 model.add(LeakyReLU(alpha=.001)) 
 model.add(Dense(512,activation='linear'))
@@ -40,12 +40,12 @@ dqn = DQNAgent(model=model, policy=policy,  nb_actions=nb_actions, memory=memory
 target_model_update=1e-1, enable_double_dqn=True, enable_dueling_network=True)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
-outputFile=open("manyDataTrainingResults.csv", "w+")
+outputFile=open("manyDataOvernightBigNet.csv", "w+")
 outputFile.write("iteration,trainAccuracy,trainCoverage,trainReward,validationAccuracy,validationCoverage,validationReward\n")
 iteration = 0
 
 policy.eps = 0.25
-for i in range(0,5):
+"""for i in range(0,5):
     dqn.fit(trainEnv, nb_steps=3160, visualize=False, callbacks=[trainer], verbose=0)
     (episodes,trainCoverage,trainAccuracy,trainReward)=trainer.getInfo()
     dqn.test(validationEnv, nb_episodes=300, verbose=0, callbacks=[validator], visualize=False)
@@ -55,9 +55,9 @@ for i in range(0,5):
     iteration+=1
     validator.reset()
     trainer.reset()
-
+"""
 policy.eps = 0.1
-for i in range(0,10):
+for i in range(0,100):
     dqn.fit(trainEnv, nb_steps=3160, visualize=False, callbacks=[trainer], verbose=0)
     (episodes,trainCoverage,trainAccuracy,trainReward)=trainer.getInfo()
     dqn.test(validationEnv, nb_episodes=300, verbose=0, callbacks=[validator], visualize=False)
@@ -68,6 +68,9 @@ for i in range(0,10):
     validator.reset()
     trainer.reset()
 
+
+dqn.save_weights(filepath="LongShort.weights",overwrite=True)
+"""
 policy.eps = 0
 for i in range(0,30):
     dqn.fit(trainEnv, nb_steps=3160, visualize=False, callbacks=[trainer], verbose=0)
@@ -79,5 +82,5 @@ for i in range(0,30):
     iteration+=1
     validator.reset()
     trainer.reset()
-
+"""
 outputFile.close()
