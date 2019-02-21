@@ -40,7 +40,7 @@ dqn = DQNAgent(model=model, policy=policy,  nb_actions=nb_actions, memory=memory
 target_model_update=1e-1, enable_double_dqn=True, enable_dueling_network=True)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
-outputFile=open("./Output/csv/hourResolutionLongShort.csv", "w+")
+outputFile=open("./Output/csv/oneResCloseMinusOpenLongShort.csv", "w+")
 outputFile.write("iteration,trainAccuracy,trainCoverage,trainReward,validationAccuracy,validationCoverage,validationReward\n")
 iteration = 0
 

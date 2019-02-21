@@ -70,9 +70,9 @@ class SpEnv(gym.Env):
         currentData=currentData + dayList + weekList
 
         closeMinusOpen=list(map(lambda x: x["Close"]-x["Open"],currentData))
-        high=list(map(lambda x: x["High"],currentData))
-        low=list(map(lambda x: x["Low"],currentData))
-        volume=list(map(lambda x: x["Volume"],currentData))
+        # high=list(map(lambda x: x["High"],currentData))
+        # low=list(map(lambda x: x["Low"],currentData))
+        # volume=list(map(lambda x: x["Volume"],currentData))
 
         self.nextObservation=0
         while(self.history[self.currentObservation]['Date']==self.history[(self.currentObservation+self.nextObservation)%self.limit]['Date']):
@@ -90,7 +90,11 @@ class SpEnv(gym.Env):
         
         self.done=True
         
-        state = numpy.array([closeMinusOpen,high,low,volume])
+
+
+        
+        state = numpy.array([closeMinusOpen])
+        #state = numpy.array([closeMinusOpen,high,low,volume])
 
         
         return state, self.reward, self.done, {}
@@ -127,12 +131,12 @@ class SpEnv(gym.Env):
             self.reset()
         self.nextObservation=0
         closeMinusOpen=list(map(lambda x: x["Close"]-x["Open"],currentData))
-        high=list(map(lambda x: x["High"],currentData))
-        low=list(map(lambda x: x["Low"],currentData))
-        volume=list(map(lambda x: x["Volume"],currentData))
+        #high=list(map(lambda x: x["High"],currentData))
+        #low=list(map(lambda x: x["Low"],currentData))
+        #volume=list(map(lambda x: x["Volume"],currentData))
 
         
-
-        state = numpy.array([closeMinusOpen,high,low,volume])
+        state = numpy.array([closeMinusOpen])
+        #state = numpy.array([closeMinusOpen,high,low,volume])
         return state
 
