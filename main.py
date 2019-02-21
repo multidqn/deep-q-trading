@@ -23,7 +23,7 @@ trainer = ValidationCallback()
 nb_actions = trainEnv.action_space.n
 
 model = Sequential()
-model.add(Flatten(input_shape=(50,1,60)))
+model.add(Flatten(input_shape=(50,1,68)))
 model.add(Dense(256,activation='linear'))
 model.add(LeakyReLU(alpha=.001)) 
 model.add(Dense(512,activation='linear'))
