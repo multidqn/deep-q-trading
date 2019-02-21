@@ -57,7 +57,7 @@ for i in range(0,5):
     trainer.reset()
 
 policy.eps = 0.1
-for i in range(0,100):
+for i in range(0,15):
     dqn.fit(trainEnv, nb_steps=3160, visualize=False, callbacks=[trainer], verbose=0)
     (episodes,trainCoverage,trainAccuracy,trainReward)=trainer.getInfo()
     dqn.test(validationEnv, nb_episodes=300, verbose=0, callbacks=[validator], visualize=False)
@@ -72,7 +72,7 @@ for i in range(0,100):
 #dqn.save_weights(filepath="LongShort.weights",overwrite=True)
 
 policy.eps = 0
-for i in range(0,30):
+for i in range(0,20):
     dqn.fit(trainEnv, nb_steps=3160, visualize=False, callbacks=[trainer], verbose=0)
     (episodes,trainCoverage,trainAccuracy,trainReward)=trainer.getInfo()
     dqn.test(validationEnv, nb_episodes=300, verbose=0, callbacks=[validator], visualize=False)
