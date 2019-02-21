@@ -10,7 +10,7 @@ class SpEnv(gym.Env):
     continuous = False
 
     def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, outputFile = ""):
-        spTimeserie = pandas.read_csv('sp500Hour.csv')[minLimit:maxLimit] # opening the dataset
+        spTimeserie = pandas.read_csv('./dataset/sp500Hour.csv')[minLimit:maxLimit] # opening the dataset
         Date = spTimeserie.ix[:, 'Date'].tolist()
         Time = spTimeserie.ix[:, 'Time'].tolist()
         Open = spTimeserie.ix[:, 'Open'].tolist()
