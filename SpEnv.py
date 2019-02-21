@@ -59,10 +59,11 @@ class SpEnv(gym.Env):
     def step(self, action):
         self.reward=0
 
+        weekList = []
+        dayList = []
 
-
-        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
+        #dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
+        #weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
         
         currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
 
@@ -106,8 +107,13 @@ class SpEnv(gym.Env):
                 str(self.possibleGain) + "," + 
                 str((1 if (self.reward>=self.possibleGain and self.reward>=0) else 0)) + "\n")
         
-        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
+        dayList = []
+        weekList = []
+
+
+
+        #dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
+        #weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
         
         currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
 
