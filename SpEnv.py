@@ -62,8 +62,8 @@ class SpEnv(gym.Env):
         weekList = []
         dayList = []
 
-        #dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        #weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
+        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
+        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
         
         currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
 
@@ -116,8 +116,8 @@ class SpEnv(gym.Env):
 
 
 
-        #dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        #weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
+        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
+        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
         
         currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
 

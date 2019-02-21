@@ -23,7 +23,7 @@ trainer = ValidationCallback()
 nb_actions = trainEnv.action_space.n
 
 model = Sequential()
-model.add(Flatten(input_shape=(50,1,40)))
+model.add(Flatten(input_shape=(50,1,60)))
 model.add(Dense(256,activation='linear'))
 model.add(LeakyReLU(alpha=.001)) 
 model.add(Dense(512,activation='linear'))
@@ -40,7 +40,7 @@ dqn = DQNAgent(model=model, policy=policy,  nb_actions=nb_actions, memory=memory
 target_model_update=1e-1, enable_double_dqn=True, enable_dueling_network=True)
 dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 
-outputFile=open("./Output/csv/oneResCloseMinusOpenLongShort.csv", "w+")
+outputFile=open("./Output/csv/manyResCloseMinusOpenLongShort.csv", "w+")
 outputFile.write("iteration,trainAccuracy,trainCoverage,trainReward,validationAccuracy,validationCoverage,validationReward\n")
 iteration = 0
 
