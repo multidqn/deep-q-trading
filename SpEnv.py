@@ -19,8 +19,8 @@ class SpEnv(gym.Env):
         Close = spTimeserie.ix[:, 'Close'].tolist()
         Volume = spTimeserie.ix[:, 'Volume'].tolist()
 
-        self.weekData = MergedDataStructure(delta=8,filename="sp500Week.csv")
-        self.dayData = MergedDataStructure(delta=20,filename="sp500Day.csv")
+        self.weekData = MergedDataStructure(delta=8,filename="./dataset/sp500Week.csv")
+        self.dayData = MergedDataStructure(delta=20,filename="./dataset/sp500Day.csv")
         
         
         self.output=False
