@@ -69,7 +69,7 @@ class SpEnv(gym.Env):
 
         currentData=currentData + dayList + weekList
 
-        closeMinusOpen=list(map(lambda x: x["Close"]-x["Open"],currentData))
+        closeMinusOpen=list(map(lambda x: (x["Close"]-x["Open"])/x["Open"],currentData))
         # high=list(map(lambda x: x["High"],currentData))
         # low=list(map(lambda x: x["Low"],currentData))
         # volume=list(map(lambda x: x["Volume"],currentData))
@@ -130,7 +130,7 @@ class SpEnv(gym.Env):
             self.currentObservation=self.observationWindow
             self.reset()
         self.nextObservation=0
-        closeMinusOpen=list(map(lambda x: x["Close"]-x["Open"],currentData))
+        closeMinusOpen=list(map(lambda x: (x["Close"]-x["Open"])/x["Open"],currentData))
         #high=list(map(lambda x: x["High"],currentData))
         #low=list(map(lambda x: x["Low"],currentData))
         #volume=list(map(lambda x: x["Volume"],currentData))
