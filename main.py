@@ -43,7 +43,7 @@ dqn.compile(Adam(lr=1e-3), metrics=['mae'])
 outputFile=open("./Output/csv/feb22y2019/Test2.csv", "w+")
 outputFile.write("iteration,trainAccuracy,trainCoverage,trainReward,validationAccuracy,validationCoverage,validationReward\n")
 iteration = 0
-"""
+
 policy.eps = 0.25
 for i in range(0,5):
     dqn.fit(trainEnv, nb_steps=3160, visualize=False, callbacks=[trainer], verbose=0)
@@ -55,9 +55,9 @@ for i in range(0,5):
     iteration+=1
     validator.reset()
     trainer.reset()
-"""
-policy.eps = 0.20
-for i in range(0,10):
+
+policy.eps = 0.1
+for i in range(0,5):
     dqn.fit(trainEnv, nb_steps=3160, visualize=False, callbacks=[trainer], verbose=0)
     (episodes,trainCoverage,trainAccuracy,trainReward)=trainer.getInfo()
     dqn.test(validationEnv, nb_episodes=300, verbose=0, callbacks=[validator], visualize=False)
