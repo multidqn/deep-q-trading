@@ -56,7 +56,7 @@ for i in range(0,5):
     validator.reset()
     trainer.reset()
 """
-policy.eps = 0.1
+policy.eps = 0.20
 for i in range(0,10):
     dqn.fit(trainEnv, nb_steps=3160, visualize=False, callbacks=[trainer], verbose=0)
     (episodes,trainCoverage,trainAccuracy,trainReward)=trainer.getInfo()
