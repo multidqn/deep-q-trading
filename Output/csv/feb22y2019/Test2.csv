@@ -1,0 +1,4 @@
+iteration,trainAccuracy,trainCoverage,trainReward,validationAccuracy,validationCoverage,validationReward
+0,1.0,1.0,394700.0,1.0,1.0,4070575.0
+1,1.0,1.0,614650.0,1.0,1.0,3419225.0
+2,1.0,1.0,647000.0,1.0,1.0,5801250.0

@@ -10,6 +10,8 @@ class SpEnv(gym.Env):
     continuous = False
 
     def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, outputFile = ""):
+        self.episodio=1
+
         spTimeserie = pandas.read_csv('./dataset/sp500Hour.csv')[minLimit:maxLimit] # opening the dataset
         Date = spTimeserie.ix[:, 'Date'].tolist()
         Time = spTimeserie.ix[:, 'Time'].tolist()
@@ -39,7 +41,7 @@ class SpEnv(gym.Env):
         self.history=[]
         self.observationWindow = observationWindow
         self.currentObservation = observationWindow
-        print(self.currentObservation)
+        #print(self.currentObservation)
         self.operationCost=operationCost
         self.done = False
         self.limit = len(Open)
@@ -47,9 +49,10 @@ class SpEnv(gym.Env):
             self.history.append({'Date' : Date[i],'Time' : Time[i], 'Open': Open[i], 'High': High[i], 'Low': Low[i], 'Close': Close[i], 'Volume': Volume[i] })
         
         self.nextObservation=0
+        # print(self.currentObservation)
         while(self.history[self.currentObservation]['Date']==self.history[(self.currentObservation+self.nextObservation)%self.limit]['Date']):
             self.nextObservation+=1
-        print(self.limit)
+        # print(self.limit)
         self.reward = None
         self.possibleGain = 0
         self.openValue = 0
@@ -58,7 +61,6 @@ class SpEnv(gym.Env):
 
     def step(self, action):
         self.reward=0
-
         weekList = []
         dayList = []
 
@@ -87,7 +89,10 @@ class SpEnv(gym.Env):
             self.reward = (-self.possibleGain)-self.operationCost
         else:
             self.reward = 0
-        
+
+
+        #self.currentObservation+=self.nextObservation
+
         self.done=True
         
 
@@ -95,12 +100,25 @@ class SpEnv(gym.Env):
         
         state = numpy.array([closeMinusOpen])
         #state = numpy.array([closeMinusOpen,high,low,volume])
-
+        #print(str(action) + " " + str(self.reward))
         
         return state, self.reward, self.done, {}
         
 
     def reset(self):
+        self.done = False
+        self.episodio+=1
+        self.nextObservation=0
+        while(self.history[self.currentObservation]['Date']==self.history[(self.currentObservation+self.nextObservation)%self.limit]['Date']):
+            self.nextObservation+=1
+            if((self.currentObservation+self.nextObservation)>=self.limit):
+                print("Balordo: episodio " + str(self.episodio) )
+            
+        #print(self.limit)
+        self.reward = None
+        self.possibleGain = 0
+        self.openValue = 0
+        self.closeValue = 0
 
         if(self.output and self.reward!=None):
             self.outputFile.write(
@@ -140,3 +158,6 @@ class SpEnv(gym.Env):
         #state = numpy.array([closeMinusOpen,high,low,volume])
         return state
 
+    def resetEnv(self):
+        self.currentObservation=self.observationWindow
+        self.episodio=1
