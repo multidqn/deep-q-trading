@@ -44,33 +44,6 @@ class DeepQTrading:
         env=" "
 
         iteration=0
-        """
-        minLimit=None
-        while(minLimit is None):
-            try:
-                minLimit = self.sp.get_loc(self.currentStartingPoint)
-            except:
-                self.currentStartingPoint+=datetime.timedelta(0,0,0,0,0,1,0)
-        maxLimit=None
-        while(maxLimit is None):
-            try:
-                maxLimit = self.sp.get_loc(self.currentStartingPoint+self.trainSize)
-            except:
-                self.currentStartingPoint+=datetime.timedelta(0,0,0,0,0,1,0)
-
-        eps=self.explorations[0]
-        self.policy.eps = eps[0]
-        print(eps[1])
-        env = SpEnv(operationCost=self.operationCost,minLimit=minLimit,maxLimit=maxLimit)
-        for i in range(0,eps[1]):
-            print(str(i) + " " + str(self.trainSize.days-10))
-            self.agent.fit(env,nb_steps=self.trainSize.days-65,visualize=False,callbacks=[self.trainer],verbose=0)#problema con nb_steps (devo cercare di farlo in episodi)
-            env.resetEnv()
-
-        (episodes,trainCoverage,trainAccuracy,trainReward)=self.trainer.getInfo()
-        print(str(iteration) + " TRAIN:  acc: " + str(trainAccuracy)+ " cov: " + str(trainCoverage)+ " rew: " + str(trainReward))
-        self.trainer.reset()
-        """
 
         while(self.currentStartingPoint+self.walkSize <= self.endingPoint):
             iteration+=1
@@ -131,16 +104,6 @@ class DeepQTrading:
 
             self.validator.reset()
 
-            # minLimit=maxLimit
-            # minLimit=None
-            # while(minLimit is None):
-            #     try:
-            #         minLimit = self.sp.get_loc(self.currentStartingPoint+self.walkSize)
-            #     except:
-            #         self.currentStartingPoint+=datetime.timedelta(0,0,0,0,0,1,0)
-            #outputFile.write(str(iteration) + "," + str(trainAccuracy)+ "," + str(trainCoverage)+ "," + str(trainReward)+ "," + str(validAccuracy)+ "," + str(validCoverage)+ "," + str(validReward) + "\n")
-            #print(str(iteration) + " TRAIN:  acc: " + str(trainAccuracy)+ " cov: " + str(trainCoverage)+ " rew: " + str(trainReward)+ " VALID:  acc: " + str(validAccuracy)+ " cov: " + str(validCoverage)+ " rew: " + str(validReward))
-            
             minLimit=maxLimit
 
 
