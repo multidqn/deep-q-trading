@@ -36,9 +36,7 @@ class DeepQTrading:
         self.trainer=ValidationCallback()
         self.validator=ValidationCallback()
         self.tester=ValidationCallback()
-        self.outputFile=[]
-        self.outputFile[0]=open(outputFile+"1.csv", "w+")
-        self.outputFile[1]=open(outputFile+"2.csv", "w+")
+        self.outputFile=[open(outputFile+"1.csv", "w+"),open(outputFile+"2.csv", "w+")]
         self.outputFile[0].write("date,trainAccuracy,trainCoverage,trainReward,validationAccuracy,validationCoverage,validationReward,testAccuracy,testCoverage,testReward\n")
         self.outputFile[1].write("date,trainAccuracy,trainCoverage,trainReward,validationAccuracy,validationCoverage,validationReward,testAccuracy,testCoverage,testReward\n")
 
