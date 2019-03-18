@@ -30,12 +30,12 @@ model.add(Activation('linear'))
 dqt = DeepQTrading(
     model=model,
     explorations=[(0.1,100)],
-    trainSize=datetime.timedelta(days=365*10),
-    validationSize=datetime.timedelta(days=365),
-    testSize=datetime.timedelta(days=365),
+    trainSize=datetime.timedelta(days=360*10),
+    validationSize=datetime.timedelta(days=360),
+    testSize=datetime.timedelta(days=360),
     outputFile="twoWalksVisualize",
     begin=datetime.datetime(2004,1,1,0,0,0,0),
-    end=datetime.datetime(2017,12,1,0,0,0,0),
+    end=datetime.datetime(2018,12,1,0,0,0,0),
     nbActions=nb_actions
     )
 
