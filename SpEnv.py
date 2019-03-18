@@ -4,12 +4,13 @@ import numpy
 import pandas
 from datetime import datetime
 from MergedDataStructure import MergedDataStructure
+import Callback
 
 class SpEnv(gym.Env):
     
     continuous = False
 
-    def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, outputFile = ""):
+    def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, outputFile = "", callback = None):
         self.episodio=1
 
         spTimeserie = pandas.read_csv('./dataset/sp500Hour.csv')[minLimit:maxLimit] # opening the dataset
@@ -57,6 +58,7 @@ class SpEnv(gym.Env):
         self.possibleGain = 0
         self.openValue = 0
         self.closeValue = 0
+        self.callback=callback
 
 
     def step(self, action):
@@ -94,6 +96,9 @@ class SpEnv(gym.Env):
         #self.currentObservation+=self.nextObservation
 
         self.done=True
+
+        if(self.callback!=None and self.done):
+            self.callback.on_episode_end(action,self.reward)
         
 
 
