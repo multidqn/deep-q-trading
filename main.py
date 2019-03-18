@@ -1,4 +1,4 @@
-from DeepQTrading import DeepQTrading
+from DeepQTradingWV import DeepQTrading
 import datetime
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
@@ -30,14 +30,17 @@ model.add(Activation('linear'))
 dqt = DeepQTrading(
     model=model,
     explorations=[(0.1,100)],
-    trainSize=datetime.timedelta(days=365),
-    validationSize=datetime.timedelta(days=30),
-    testSize=datetime.timedelta(days=30),
-    outputFile="output.csv",
+    trainSize=datetime.timedelta(days=365*10),
+    validationSize=datetime.timedelta(days=365),
+    testSize=datetime.timedelta(days=365),
+    outputFile="twoWalksVisualize",
     begin=datetime.datetime(2004,1,1,0,0,0,0),
     end=datetime.datetime(2017,12,1,0,0,0,0),
     nbActions=nb_actions
     )
+
+
+#TODO: 2 walk di cui stamparne ogni singola iterazione di dimensione 10 anni, 1 anno, 1 anno
 
 dqt.run()
 dqt.end()
