@@ -133,6 +133,7 @@ class DeepQTrading:
 
     def end(self):
         import os 
-        self.outputFile.close()
+        for outputFile in self.outputFile:
+            outputFile.close() 
         os.remove("q.weights")
 
