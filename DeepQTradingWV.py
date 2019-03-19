@@ -37,9 +37,10 @@ class DeepQTrading:
         self.trainer=ValidationCallback()
         self.validator=ValidationCallback()
         self.tester=ValidationCallback()
-        self.outputFile=[open(outputFile+"1.csv", "w+"),open(outputFile+"2.csv", "w+")]
+        self.outputFile=[open(outputFile+"1.csv", "w+"),open(outputFile+"2.csv", "w+"),open(outputFile+"3.csv", "w+")]
         self.outputFile[0].write("date,trainAccuracy,trainCoverage,trainReward,trainLong%,trainShort%,trainLongP,trainShortP,validationAccuracy,validationCoverage,validationReward,validationLong%,validationShort%,validationLongP,validationShortP,testAccuracy,testCoverage,testReward,testLong%,testShort%,testLongP,testShortP\n")
-        self.outputFile[1].write("date,trainAccuracy,trainCoverage,trainReward,validationAccuracy,validationCoverage,validationReward,testAccuracy,testCoverage,testReward\n")
+        self.outputFile[1].write("date,trainAccuracy,trainCoverage,trainReward,trainLong%,trainShort%,trainLongP,trainShortP,validationAccuracy,validationCoverage,validationReward,validationLong%,validationShort%,validationLongP,validationShortP,testAccuracy,testCoverage,testReward,testLong%,testShort%,testLongP,testShortP\n")
+        self.outputFile[2].write("date,trainAccuracy,trainCoverage,trainReward,trainLong%,trainShort%,trainLongP,trainShortP,validationAccuracy,validationCoverage,validationReward,validationLong%,validationShort%,validationLongP,validationShortP,testAccuracy,testCoverage,testReward,testLong%,testShort%,testLongP,testShortP\n")
 
 
     def run(self):
