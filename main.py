@@ -1,3 +1,9 @@
+import os
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
+ 
+# The GPU id to use, usually either "0" or "1";
+os.environ["CUDA_VISIBLE_DEVICES"]="0";  
+
 from DeepQTradingWV import DeepQTrading
 import datetime
 from keras.models import Sequential
@@ -8,6 +14,7 @@ from rl.agents.dqn import DQNAgent
 from rl.memory import SequentialMemory
 from rl.policy import EpsGreedyQPolicy
 import sys
+
 
 
 nb_actions = 3
