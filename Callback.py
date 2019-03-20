@@ -20,6 +20,8 @@ class ValidationCallback(Callback):
         self.coverage = 0
         self.short = 0
         self.long = 0
+        self.shortPrecision =0
+        self.longPrecision =0
         
 
     def on_episode_end(self, action, reward):
