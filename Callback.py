@@ -39,6 +39,10 @@ class ValidationCallback(Callback):
     def getInfo(self):
         acc = 0
         cov = 0
+        short = 0
+        long = 0
+        longP = 0
+        shortP = 0
         if self.coverage > 0:
             acc = self.accuracy/self.coverage
         if self.episodes > 0:
