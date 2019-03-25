@@ -12,7 +12,7 @@ import pandas as pd
 import datetime
 
 class DeepQTrading:
-    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, operationCost=0):
+    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, nOutput=1, operationCost=0):
         self.policy = EpsGreedyQPolicy()
         self.explorations=explorations
         self.nbActions=nbActions
@@ -38,10 +38,11 @@ class DeepQTrading:
         self.validator=ValidationCallback()
         self.tester=ValidationCallback()
         self.outputFile=[open(outputFile+"1.csv", "w+"),open(outputFile+"2.csv", "w+"),open(outputFile+"3.csv", "w+")]
-        self.outputFile[0].write("date,trainAccuracy,trainCoverage,trainReward,trainLong%,trainShort%,trainLongP,trainShortP,validationAccuracy,validationCoverage,validationReward,validationLong%,validationShort%,validationLongP,validationShortP,testAccuracy,testCoverage,testReward,testLong%,testShort%,testLongP,testShortP\n")
-        self.outputFile[1].write("date,trainAccuracy,trainCoverage,trainReward,trainLong%,trainShort%,trainLongP,trainShortP,validationAccuracy,validationCoverage,validationReward,validationLong%,validationShort%,validationLongP,validationShortP,testAccuracy,testCoverage,testReward,testLong%,testShort%,testLongP,testShortP\n")
-        self.outputFile[2].write("date,trainAccuracy,trainCoverage,trainReward,trainLong%,trainShort%,trainLongP,trainShortP,validationAccuracy,validationCoverage,validationReward,validationLong%,validationShort%,validationLongP,validationShortP,testAccuracy,testCoverage,testReward,testLong%,testShort%,testLongP,testShortP\n")
 
+        for i in range(0,nOutput):
+            self.outputFile.append(open(outputFile+str(i)+".csv", "w+"))
+            self.outputFile[i].write("date,trainAccuracy,trainCoverage,trainReward,trainLong%,trainShort%,trainLongAcc,trainShortAcc,validationAccuracy,validationCoverage,validationReward,validationLong%,validationShort%,validationLongAcc,validationShortAcc,testAccuracy,testCoverage,testReward,testLong%,testShort%,testLongAcc,testShortAcc\n")
+        
 
     def run(self):
         trainEnv=validEnv=testEnv=" "
