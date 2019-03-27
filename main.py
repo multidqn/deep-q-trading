@@ -1,6 +1,6 @@
-import os
+"""import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
-os.environ["CUDA_VISIBLE_DEVICES"]="1";  
+os.environ["CUDA_VISIBLE_DEVICES"]="1";"""
 
 from DeepQTradingWV import DeepQTrading
 import datetime
@@ -41,7 +41,8 @@ dqt = DeepQTrading(
     outputFile="twoWalksVisualize",
     begin=datetime.datetime(2004,1,1,0,0,0,0),
     end=datetime.datetime(2018,12,1,0,0,0,0),
-    nbActions=nb_actions
+    nbActions=nb_actions,
+    nOutput=10
     )
 
 
