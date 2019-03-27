@@ -84,7 +84,7 @@ class SpEnv(gym.Env):
             self.nextObservation+=1
 
         self.openValue = self.history[self.currentObservation]['Open']
-        self.possibleGain = (self.closeValue - self.openValue)*50
+        self.possibleGain = (self.closeValue - self.openValue)/self.openValue
         if(action == 1):
             self.reward = self.possibleGain-self.operationCost
         elif(action==2):
@@ -98,7 +98,7 @@ class SpEnv(gym.Env):
         self.done=True
 
         if(self.callback!=None and self.done):
-            self.callback.on_episode_end(action,self.reward)
+            self.callback.on_episode_end(action,self.reward,self.possibleGain)
         
 
 
