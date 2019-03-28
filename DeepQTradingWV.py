@@ -19,7 +19,7 @@ class DeepQTrading:
         self.model=model
         self.memory = SequentialMemory(limit=10000, window_length=50)
         self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=400, 
-                            target_model_update=1e-1, enable_double_dqn=True, enable_dueling_network=True)
+                            target_model_update=5e-2, enable_double_dqn=True, enable_dueling_network=True)
         self.agent.compile(Adam(lr=1e-3), metrics=['mae'])
         self.agent.save_weights("q.weights", overwrite=True)
         self.currentStartingPoint = begin
@@ -37,11 +37,41 @@ class DeepQTrading:
         self.trainer=ValidationCallback()
         self.validator=ValidationCallback()
         self.tester=ValidationCallback()
-        self.outputFile=[open(outputFile+"1.csv", "w+"),open(outputFile+"2.csv", "w+"),open(outputFile+"3.csv", "w+")]
+        self.outputFile=[]
 
         for i in range(0,nOutput):
-            self.outputFile.append(open(outputFile+str(i)+".csv", "w+"))
-            self.outputFile[i].write("date,trainAccuracy,trainCoverage,trainReward,trainLong%,trainShort%,trainLongAcc,trainShortAcc,validationAccuracy,validationCoverage,validationReward,validationLong%,validationShort%,validationLongAcc,validationShortAcc,testAccuracy,testCoverage,testReward,testLong%,testShort%,testLongAcc,testShortAcc\n")
+            self.outputFile.append(open(outputFile+str(i+1)+".csv", "w+"))
+            self.outputFile[i].write(
+                "date,"+
+            "trainAccuracy,"+
+            "trainCoverage,"+
+            "trainReward,"+
+            "trainLong%,"+
+            "trainShort%,"+
+            "trainLongAcc,"+
+            "trainShortAcc,"+
+            "trainLongPrec,"+
+            "trainShortPrec,"+
+
+            "validationAccuracy,"+
+            "validationCoverage,"+
+            "validationReward,"+
+            "validationLong%,"+
+            "validationShort%,"+
+            "validationLongAcc,"+
+            "validationShortAcc,"+
+            "validLongPrec,"+
+            "validShortPrec,"+
+            
+            "testAccuracy,"+
+            "testCoverage,"+
+            "testReward,"+
+            "testLong%,"+
+            "testShort%,"+
+            "testLongAcc,"+
+            "testShortAcc,"+
+            "testLongPrec,"+
+            "testShortPrec\n")
         
 
     def run(self):
@@ -114,17 +144,17 @@ class DeepQTrading:
 
                     trainEnv.resetEnv()
                     self.agent.fit(trainEnv,nb_steps=floor(self.trainSize.days-self.trainSize.days*0.2),visualize=False,verbose=0)
-                    (_,trainCoverage,trainAccuracy,trainReward,trainLongPerc,trainShortPerc,trainLongPrec,trainShortPrec)=self.trainer.getInfo()
+                    (_,trainCoverage,trainAccuracy,trainReward,trainLongPerc,trainShortPerc,trainLongAcc,trainShortAcc,trainLongPrec,trainShortPrec)=self.trainer.getInfo()
                     print(str(i) + " TRAIN:  acc: " + str(trainAccuracy)+ " cov: " + str(trainCoverage)+ " rew: " + str(trainReward))
 
                     validEnv.resetEnv()
                     self.agent.test(validEnv,nb_episodes=floor(self.validationSize.days-self.validationSize.days*0.2),visualize=False,verbose=0)
-                    (_,validCoverage,validAccuracy,validReward,validLongPerc,validShortPerc,validLongPrec,validShortPrec)=self.validator.getInfo()
+                    (_,validCoverage,validAccuracy,validReward,validLongPerc,validShortPerc,validLongAcc,validShortAcc,validLongPrec,validShortPrec)=self.validator.getInfo()
                     print(str(i) + " VALID:  acc: " + str(validAccuracy)+ " cov: " + str(validCoverage)+ " rew: " + str(validReward))
 
                     testEnv.resetEnv()
                     self.agent.test(testEnv,nb_episodes=floor(self.validationSize.days-self.validationSize.days*0.2),visualize=False,verbose=0)
-                    (_,testCoverage,testAccuracy,testReward,testLongPerc,testShortPerc,testLongPrec,testShortPrec)=self.tester.getInfo()
+                    (_,testCoverage,testAccuracy,testReward,testLongPerc,testShortPerc,testLongAcc,testShortAcc,testLongPrec,testShortPrec)=self.tester.getInfo()
                     print(str(i) + " TEST:  acc: " + str(testAccuracy)+ " cov: " + str(testCoverage)+ " rew: " + str(testReward))
 
                     print(" ")
@@ -136,6 +166,8 @@ class DeepQTrading:
                         str(trainReward)+","+
                         str(trainLongPerc)+","+
                         str(trainShortPerc)+","+
+                        str(trainLongAcc)+","+
+                        str(trainShortAcc)+","+
                         str(trainLongPrec)+","+
                         str(trainShortPrec)+","+
                         
@@ -144,6 +176,8 @@ class DeepQTrading:
                         str(validReward)+","+
                         str(validLongPerc)+","+
                         str(validShortPerc)+","+
+                        str(validLongAcc)+","+
+                        str(validShortAcc)+","+
                         str(validLongPrec)+","+
                         str(validShortPrec)+","+
                         
@@ -152,6 +186,8 @@ class DeepQTrading:
                         str(testReward)+","+
                         str(testLongPerc)+","+
                         str(testShortPerc)+","+
+                        str(testLongAcc)+","+
+                        str(testShortAcc)+","+
                         str(testLongPrec)+","+
                         str(testShortPrec)+"\n")
 
