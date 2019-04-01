@@ -12,7 +12,10 @@ from rl.agents.dqn import DQNAgent
 from rl.memory import SequentialMemory
 from rl.policy import EpsGreedyQPolicy
 import sys
+import telegram
 
+
+bot = telegram.Bot(token='864997856:AAFjYS9qw9Gd3L_AwYGBPdhE7w-SWxf-JjU')
 
 
 nb_actions = 3
@@ -36,11 +39,11 @@ dqt = DeepQTrading(
     model=model,
     explorations=[(0.1,50)],
     trainSize=datetime.timedelta(days=360*10),
-    validationSize=datetime.timedelta(days=180),
-    testSize=datetime.timedelta(days=180),
-    outputFile="twoWalksVisualize",
+    validationSize=datetime.timedelta(days=360),
+    testSize=datetime.timedelta(days=360),
+    outputFile="walks",
     begin=datetime.datetime(2004,1,1,0,0,0,0),
-    end=datetime.datetime(2018,12,1,0,0,0,0),
+    end=datetime.datetime(2018,2,28,0,0,0,0),
     nbActions=nb_actions,
     nOutput=15
     )
@@ -48,5 +51,10 @@ dqt = DeepQTrading(
 
 #TODO: 2 walk di cui stamparne ogni singola iterazione di dimensione 10 anni, 1 anno, 1 anno
 
-dqt.run()
+try:
+    dqt.run()
+    bot.send_message(chat_id='@DeepQTrading', text="Finito senza errori -- "+str(datetime.datetime.now()))
+except: 
+    bot.send_message(chat_id='@DeepQTrading', text="Finito con errori -- "+str(datetime.datetime.now()))
+
 dqt.end()

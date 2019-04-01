@@ -46,7 +46,7 @@ class ValidationCallback(Callback):
             self.longPrec+=1 if(action == 1) else 0
         elif(market<0):
             self.marketFall+=1
-            self.longPrec+=1 if(action == 2) else 0
+            self.shortPrec+=1 if(action == 2) else 0
 
     def getInfo(self):
         acc = 0
