@@ -8,12 +8,14 @@ outputFile=str(sys.argv[1])+".pdf"
 numFiles=int(sys.argv[2])
 plt.figure(figsize=(5*(numFiles+1),numPlots*5)) 
 for i in range(1,numFiles+1):
-    document = pd.read_csv("twoWalksVisualize"+str(i)+".csv")
+    document = pd.read_csv("walks"+str(i)+".csv")
     plt.subplot(numPlots,numFiles,0*numFiles + i )
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'testAccuracy'].tolist(),'r',label='Test')
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'trainAccuracy'].tolist(),'b',label='Train')
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'validationAccuracy'].tolist(),'g',label='Validation')
     plt.xticks(range(0,50,4))
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Walk'+str(i)+'\n\nAccuracy')
@@ -23,6 +25,8 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'trainCoverage'].tolist(),'b',label='Train')
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'validationCoverage'].tolist(),'g',label='Validation')
     plt.xticks(range(0,50,4))
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Coverage')
@@ -35,6 +39,7 @@ for i in range(1,numFiles+1):
     #plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'testReward'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Train Reward')
@@ -47,6 +52,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'testReward'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Validation & Test Reward')
@@ -59,6 +65,9 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'validationLong%'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
+    
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Long %')
@@ -71,6 +80,9 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'validationShort%'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
+    
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Short %')
@@ -83,6 +95,9 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),list(map(lambda x: 1-x,document.ix[:, 'validationCoverage'].tolist())),'g',label='Validation')
     
     plt.xticks(range(0,50,4))
+    
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Hold %')
@@ -95,6 +110,9 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'validationLongAcc'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
+    
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Short Accuracy')
@@ -108,6 +126,9 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'validationShortAcc'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
+    
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Short Accuracy')
@@ -121,6 +142,9 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'validLongPrec'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
+    
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Long Precision')
@@ -134,11 +158,14 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'date'].tolist(),document.ix[:, 'validShortPrec'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
+    
+    plt.ylim(-0.05,1.05)
+    plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
     plt.title('Short Precision')
 
 
-plt.suptitle("Esperimento 1, diminuito tasso di aggiornamento dei pesi e Train e validation durata 6 mesi ")
+plt.suptitle("Esperimento 2, diminuito tasso di aggiornamento dei pesi; Train e validation durata 12 mesi ",size='xx-large')
 
 plt.savefig(outputFile,dpi=700)
