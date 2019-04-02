@@ -166,6 +166,6 @@ for i in range(1,numFiles+1):
     plt.title('Short Precision')
 
 
-plt.suptitle("Esperimento 2, diminuito tasso di aggiornamento dei pesi; Train e validation durata 12 mesi ",size='xx-large')
+plt.suptitle("Esperimento 3: reset tasso di aggiornamento pesi; Train e validation durata 6 mesi ",size='xx-large')
 
 plt.savefig(outputFile,dpi=700)

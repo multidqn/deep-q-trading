@@ -6,6 +6,7 @@ from datetime import datetime
 from MergedDataStructure import MergedDataStructure
 import Callback
 
+
 class SpEnv(gym.Env):
     
     continuous = False

@@ -10,16 +10,20 @@ from rl.policy import EpsGreedyQPolicy
 from math import floor
 import pandas as pd
 import datetime
+import telegram
+
 
 class DeepQTrading:
     def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, nOutput=1, operationCost=0):
+        self.bot = telegram.Bot(token='864997856:AAFjYS9qw9Gd3L_AwYGBPdhE7w-SWxf-JjU')
+
         self.policy = EpsGreedyQPolicy()
         self.explorations=explorations
         self.nbActions=nbActions
         self.model=model
         self.memory = SequentialMemory(limit=10000, window_length=50)
         self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=400, 
-                            target_model_update=1e-1, enable_double_dqn=True, enable_dueling_network=True)
+                            target_model_update=1e-1, enable_double_dqn=False, enable_dueling_network=False)
         self.agent.compile(Adam(lr=1e-3), metrics=['mae'])
         self.agent.save_weights("q.weights", overwrite=True)
         self.currentStartingPoint = begin
@@ -42,7 +46,7 @@ class DeepQTrading:
         for i in range(0,nOutput):
             self.outputFile.append(open(outputFile+str(i+1)+".csv", "w+"))
             self.outputFile[i].write(
-                "date,"+
+            "Iteration,"+
             "trainAccuracy,"+
             "trainCoverage,"+
             "trainReward,"+
@@ -81,6 +85,7 @@ class DeepQTrading:
 
         while(self.currentStartingPoint+self.walkSize <= self.endingPoint):
             iteration+=1
+            self.bot.send_message(chat_id='@DeepQTrading', text="Iterazione "+str(iteration)+" iniziata.")
             
             del(self.memory)
             del(self.agent)

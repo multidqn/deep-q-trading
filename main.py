@@ -17,6 +17,9 @@ import telegram
 
 bot = telegram.Bot(token='864997856:AAFjYS9qw9Gd3L_AwYGBPdhE7w-SWxf-JjU')
 
+startingTime=datetime.datetime.now()
+
+bot.send_message(chat_id='@DeepQTrading', text="Esperimento Iniziato "+str(datetime.datetime.now()))
 
 nb_actions = 3
 
@@ -56,5 +59,7 @@ try:
     bot.send_message(chat_id='@DeepQTrading', text="Finito senza errori -- "+str(datetime.datetime.now()))
 except: 
     bot.send_message(chat_id='@DeepQTrading', text="Finito con errori -- "+str(datetime.datetime.now()))
+
+bot.send_message(chat_id='@DeepQTrading', text="Ho impiegato messo"+str(datetime.datetime.now() - startingTime))
 
 dqt.end()
