@@ -90,8 +90,7 @@ class DeepQTrading:
             del(self.memory)
             del(self.agent)
             self.memory = SequentialMemory(limit=10000, window_length=50)
-            self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=400, 
-                                target_model_update=1e-1, enable_double_dqn=True, enable_dueling_network=True)
+            self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=400, target_model_update=1e-1)
             self.agent.compile(Adam(lr=1e-3), metrics=['mae'])
             self.agent.load_weights("q.weights")
 

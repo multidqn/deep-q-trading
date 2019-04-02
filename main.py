@@ -60,6 +60,6 @@ try:
 except: 
     bot.send_message(chat_id='@DeepQTrading', text="Finito con errori -- "+str(datetime.datetime.now()))
 
-bot.send_message(chat_id='@DeepQTrading', text="Ho impiegato messo"+str(datetime.datetime.now() - startingTime))
+bot.send_message(chat_id='@DeepQTrading', text="Ho impiegato "+str(datetime.datetime.now() - startingTime))
 
 dqt.end()
