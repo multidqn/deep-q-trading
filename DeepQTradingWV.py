@@ -87,8 +87,10 @@ class DeepQTrading:
             iteration+=1
             self.bot.send_message(chat_id='@DeepQTrading', text="Iterazione "+str(iteration)+" iniziata.")
             
+            """
             del(self.memory)
             del(self.agent)
+            """
             self.memory = SequentialMemory(limit=180, window_length=10)
             self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=200, target_model_update=1000,
                                     enable_double_dqn=True,enable_dueling_network=True)
