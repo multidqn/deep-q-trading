@@ -53,7 +53,7 @@ dqt = DeepQTrading(
 
 
 #TODO: 2 walk di cui stamparne ogni singola iterazione di dimensione 10 anni, 1 anno, 1 anno
-
+"""
 try:
     dqt.run()
     bot.send_message(chat_id='@DeepQTrading', text="Finito senza errori -- "+str(datetime.datetime.now()))
@@ -61,5 +61,6 @@ except:
     bot.send_message(chat_id='@DeepQTrading', text="Finito con errori -- "+str(datetime.datetime.now()))
 
 bot.send_message(chat_id='@DeepQTrading', text="Ho impiegato "+str(datetime.datetime.now() - startingTime))
-
+"""
+dqt.run()
 dqt.end()
