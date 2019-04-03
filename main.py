@@ -52,7 +52,7 @@ dqt = DeepQTrading(
     )
 
 
-#TODO: 2 walk di cui stamparne ogni singola iterazione di dimensione 10 anni, 1 anno, 1 anno
+#TODO: quando perdo, deve perdere molto di più
 
 try:
     dqt.run()
