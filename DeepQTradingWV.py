@@ -21,7 +21,7 @@ class DeepQTrading:
         self.explorations=explorations
         self.nbActions=nbActions
         self.model=model
-        self.memory = SequentialMemory(limit=1000, window_length=10)
+        self.memory = SequentialMemory(limit=5000, window_length=25)
         self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=200, target_model_update=1e-1,
                                     enable_double_dqn=True,enable_dueling_network=True)
         self.agent.compile(Adam(lr=1e-3), metrics=['mae'])
@@ -90,7 +90,7 @@ class DeepQTrading:
             
             del(self.memory)
             del(self.agent)
-            self.memory = SequentialMemory(limit=1000, window_length=10)
+            self.memory = SequentialMemory(limit=5000, window_length=25)
             self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=200, target_model_update=1e-1,
                                     enable_double_dqn=True,enable_dueling_network=True)
             self.agent.compile(Adam(lr=1e-3), metrics=['mae'])
