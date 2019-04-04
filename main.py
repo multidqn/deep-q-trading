@@ -24,8 +24,10 @@ bot.send_message(chat_id='@DeepQTrading', text="Esperimento Iniziato "+str(datet
 nb_actions = 3
 
 model = Sequential()
-model.add(Flatten(input_shape=(10,1,68)))
+model.add(Flatten(input_shape=(25,1,68)))
 model.add(Dense(256,activation='linear'))
+model.add(LeakyReLU(alpha=.001))
+model.add(Dense(512,activation='linear'))
 model.add(LeakyReLU(alpha=.001)) 
 model.add(Dense(256,activation='linear'))
 model.add(LeakyReLU(alpha=.001)) 
