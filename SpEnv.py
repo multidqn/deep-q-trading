@@ -108,9 +108,8 @@ class SpEnv(gym.Env):
         #state = numpy.array([closeMinusOpen,high,low,volume])
         #print(str(action) + " " + str(self.reward))
 
-        reward=0
-        if(self.reward<0):
-            reward=self.reward*5
+        reward=self.reward*5 if(self.reward<0) else self.reward
+        
         
         return state, reward, self.done, {}
         
