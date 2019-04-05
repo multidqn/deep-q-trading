@@ -111,7 +111,7 @@ class SpEnv(gym.Env):
         if(self.reward<0):
             reward=self.reward*5
         
-        return state, self.reward, self.done, {}
+        return state, reward, self.done, {}
         
 
     def reset(self):
