@@ -53,12 +53,17 @@ dqt = DeepQTrading(
 
 
 #TODO: quando perdo, deve perdere molto di più
-
+"""
 try:
     dqt.run()
     bot.send_message(chat_id='@DeepQTrading', text="Finito senza errori -- "+str(datetime.datetime.now()))
 except: 
     bot.send_message(chat_id='@DeepQTrading', text="Finito con errori -- "+str(datetime.datetime.now()))
+"""
+
+
+dqt.run()
+
 
 bot.send_message(chat_id='@DeepQTrading', text="Ho impiegato "+str(datetime.datetime.now() - startingTime))
 
