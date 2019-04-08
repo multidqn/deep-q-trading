@@ -1,6 +1,8 @@
-import os
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
-os.environ["CUDA_VISIBLE_DEVICES"]="1";
+
+# import os
+# os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
+# os.environ["CUDA_VISIBLE_DEVICES"]="1";
+
 
 from DeepQTradingWV import DeepQTrading
 import datetime
