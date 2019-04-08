@@ -85,7 +85,7 @@ class DeepQTrading:
 
         while(self.currentStartingPoint+self.walkSize <= self.endingPoint):
             iteration+=1
-            self.bot.send_message(chat_id='@DeepQTrading', text="Iterazione "+str(iteration)+" iniziata.")
+            self.bot.send_message(chat_id='@DeepQTrading', text="Iterazione "+str(iteration + 1 )+" iniziata.")
             
             
             del(self.memory)
