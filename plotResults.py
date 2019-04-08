@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import sys
 
 
@@ -14,6 +15,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'trainAccuracy'].tolist(),'b',label='Train')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationAccuracy'].tolist(),'g',label='Validation')
     plt.xticks(range(0,50,4))
+    plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
@@ -25,6 +27,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'trainCoverage'].tolist(),'b',label='Train')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationCoverage'].tolist(),'g',label='Validation')
     plt.xticks(range(0,50,4))
+    plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
@@ -65,7 +68,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationLong%'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
-    
+    plt.yticks(np.arange(0, 1, step=0.1))    
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
@@ -80,7 +83,8 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationShort%'].tolist(),'r',label='Test')
     
     plt.xticks(range(0,50,4))
-    
+
+    plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
@@ -96,6 +100,7 @@ for i in range(1,numFiles+1):
     
     plt.xticks(range(0,50,4))
     
+    plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
@@ -111,11 +116,12 @@ for i in range(1,numFiles+1):
     
     plt.xticks(range(0,50,4))
     
+    plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
-    plt.title('Short Accuracy')
+    plt.title('Long Accuracy')
 
     
 
@@ -127,6 +133,7 @@ for i in range(1,numFiles+1):
     
     plt.xticks(range(0,50,4))
     
+    plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
@@ -143,6 +150,7 @@ for i in range(1,numFiles+1):
     
     plt.xticks(range(0,50,4))
     
+    plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
@@ -159,6 +167,7 @@ for i in range(1,numFiles+1):
     
     plt.xticks(range(0,50,4))
     
+    plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
