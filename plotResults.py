@@ -175,7 +175,7 @@ for i in range(1,numFiles+1):
     plt.title('Short Precision')
 
 
-plt.suptitle("Esperimento 6:\n"
+plt.suptitle("Esperimento 7:\n"
             +"Target model update: 1e-1\n"
             +"Model: 256-512-256\n"
             +"Memory-Window Length: 5000-2\n"
@@ -183,7 +183,7 @@ plt.suptitle("Esperimento 6:\n"
             +"Validation length: 6 Months\n"
             +"Test lenght: 6 Months\n"
             +"Starting period: 2004-01-01\n"
-            +"Other changes: negative rewards are multiplied by 5"
+            +"Other changes: negative rewards are multiplied by 50 (previous was 5)"
             ,size=30
             ,weight=3
             ,ha='left'
