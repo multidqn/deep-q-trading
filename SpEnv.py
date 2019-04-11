@@ -11,7 +11,7 @@ class SpEnv(gym.Env):
     
     continuous = False
 
-    def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, outputFile = "", callback = None):
+    def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, ensamble = None, callback = None, columnName = "iteration-1"):
         self.episodio=1
 
         spTimeserie = pandas.read_csv('./dataset/sp500Hour.csv')[minLimit:maxLimit] # opening the dataset
@@ -29,10 +29,11 @@ class SpEnv(gym.Env):
         
         self.output=False
 
-        if(outputFile!=""): # Managing file output
+        if(ensamble!=None): # Managing file output
             self.output=True
-            self.outputFile=open(outputFile, "w+")
-            self.outputFile.write("date,open,close,reward,possible_gain,hit\n")
+            self.ensamble=ensamble
+            self.columnName = columnName
+            self.ensamble[self.columnName]=0
 
         self.low = numpy.array([-numpy.inf])
         self.high = numpy.array([+numpy.inf])
@@ -109,6 +110,8 @@ class SpEnv(gym.Env):
         #print(str(action) + " " + str(self.reward))
 
         reward=self.reward*20 if(self.reward<0) else self.reward
+        if(self.output):
+            self.ensamble[self.columnName][self.history[self.currentObservation]['Date']]=action
         
         
         return state, reward, self.done, {}
@@ -129,14 +132,7 @@ class SpEnv(gym.Env):
         self.openValue = 0
         self.closeValue = 0
 
-        if(self.output and self.reward!=None):
-            self.outputFile.write(
-                str(self.history[self.currentObservation]['Date']) + "," + 
-                str(self.openValue) + "," + 
-                str(self.closeValue) + "," + 
-                str(self.reward) + "," + 
-                str(self.possibleGain) + "," + 
-                str((1 if (self.reward>=self.possibleGain and self.reward>=0) else 0)) + "\n")
+        
         
         dayList = []
         weekList = []

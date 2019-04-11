@@ -46,7 +46,7 @@ dqt = DeepQTrading(
     trainSize=datetime.timedelta(days=360*10),
     validationSize=datetime.timedelta(days=30*6),
     testSize=datetime.timedelta(days=30*6),
-    outputFile="walks",
+    outputFile="./Output/csv/walks/walks",
     begin=datetime.datetime(2004,1,1,0,0,0,0),
     end=datetime.datetime(2018,2,28,0,0,0,0),
     nbActions=nb_actions,

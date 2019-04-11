@@ -84,6 +84,12 @@ class DeepQTrading:
         iteration=-1
 
         while(self.currentStartingPoint+self.walkSize <= self.endingPoint):
+            ensambleValid=pd.DataFrame(columns=['date'])
+            ensambleValid.set_index(['date'], drop=True, append=True, inplace=False, verify_integrity=False)
+            ensambleTest=pd.DataFrame(columns=['date'])
+            ensambleTest.set_index(['date'], drop=True, append=True, inplace=False, verify_integrity=False)
+
+
             iteration+=1
             self.bot.send_message(chat_id='@DeepQTrading', text="Iterazione "+str(iteration + 1 )+" iniziata.")
             
@@ -133,17 +139,18 @@ class DeepQTrading:
                     self.currentStartingPoint+=datetime.timedelta(0,0,0,0,0,1,0)
 
 
-            date=self.currentStartingPoint
+            #ydate=self.currentStartingPoint
             for eps in self.explorations:
                 self.policy.eps = eps[0]
-                del(trainEnv)
-                trainEnv = SpEnv(operationCost=self.operationCost,minLimit=trainMinLimit,maxLimit=trainMaxLimit,callback=self.trainer)
-                del(validEnv)
-                validEnv=SpEnv(operationCost=self.operationCost,minLimit=validMinLimit,maxLimit=validMaxLimit,callback=self.validator)
-                del(testEnv)
-                testEnv=SpEnv(operationCost=self.operationCost,minLimit=testMinLimit,maxLimit=testMaxLimit,callback=self.tester)
-
+                
                 for i in range(0,eps[1]):
+                    del(trainEnv)
+                    trainEnv = SpEnv(operationCost=self.operationCost,minLimit=trainMinLimit,maxLimit=trainMaxLimit,callback=self.trainer)
+                    del(validEnv)
+                    validEnv=SpEnv(operationCost=self.operationCost,minLimit=validMinLimit,maxLimit=validMaxLimit,callback=self.validator,ensamble=ensambleValid,columnName="iteration"+str(i))
+                    del(testEnv)
+                    testEnv=SpEnv(operationCost=self.operationCost,minLimit=testMinLimit,maxLimit=testMaxLimit,callback=self.tester,ensamble=ensambleTest,columnName="iteration"+str(i))
+
                     self.trainer.reset()
                     self.validator.reset()
                     self.tester.reset()
@@ -198,6 +205,8 @@ class DeepQTrading:
                         str(testShortPrec)+"\n")
 
             self.currentStartingPoint+=self.testSize
+
+            ensambleTest.to_csv("./Output/ensamble/walk"+str(iteration)+"ensamble.csv")
 
     def end(self):
         import os 
