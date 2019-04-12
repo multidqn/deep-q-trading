@@ -29,7 +29,7 @@ class SpEnv(gym.Env):
         
         self.output=False
 
-        if(ensamble!=None): # Managing file output
+        if(ensamble is not None): # Managing file output
             self.output=True
             self.ensamble=ensamble
             self.columnName = columnName

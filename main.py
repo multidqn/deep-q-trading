@@ -60,7 +60,7 @@ try:
     bot.send_message(chat_id='@DeepQTrading', text="Finito senza errori -- "+str(datetime.datetime.now()))
 except: 
     bot.send_message(chat_id='@DeepQTrading', text="Finito con errori -- "+str(datetime.datetime.now()))
-    bot.send_message(chat_id='@DeepQTrading', text="Errore: " + sys.exc_info()[0])
+    bot.send_message(chat_id='@DeepQTrading', text="Errore: " + str(sys.exc_info()[0]))
 
 
 
