@@ -42,7 +42,7 @@ model.add(Activation('linear'))
 
 dqt = DeepQTrading(
     model=model,
-    explorations=[(0.1,5)],
+    explorations=[(0.1,50)],
     trainSize=datetime.timedelta(days=360*10),
     validationSize=datetime.timedelta(days=30*6),
     testSize=datetime.timedelta(days=30*6),
