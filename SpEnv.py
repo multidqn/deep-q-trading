@@ -23,13 +23,13 @@ class SpEnv(gym.Env):
         Close = spTimeserie.ix[:, 'Close'].tolist()
         Volume = spTimeserie.ix[:, 'Volume'].tolist()
 
-        self.weekData = MergedDataStructure(delta=8,filename="./dataset/sp500Week.csv")
-        self.dayData = MergedDataStructure(delta=20,filename="./dataset/sp500Day.csv")
+        self.weekData = MergedDataStructure(delta=8,filename="./dataset/sp500Week.csv")# this DS allows me to obtain previous historical data with different resolution
+        self.dayData = MergedDataStructure(delta=20,filename="./dataset/sp500Day.csv")#  with low computational complexity
         
         
         self.output=False
 
-        if(ensamble is not None): # Managing file output
+        if(ensamble is not None): # managing the ensamble output (maybe in the wrong way)
             self.output=True
             self.ensamble=ensamble
             self.columnName = columnName
@@ -37,7 +37,7 @@ class SpEnv(gym.Env):
 
         self.low = numpy.array([-numpy.inf])
         self.high = numpy.array([+numpy.inf])
-        self.action_space = spaces.Discrete(3) # the action space is just 0,1,2 which means nop,buy,sell
+        self.action_space = spaces.Discrete(3) # the action space is just 0,1,2 which means hold,long,short
         self.observation_space = spaces.Box(self.low, self.high, dtype=numpy.float32)
 
 
@@ -109,12 +109,12 @@ class SpEnv(gym.Env):
         #state = numpy.array([closeMinusOpen,high,low,volume])
         #print(str(action) + " " + str(self.reward))
 
-        reward=self.reward*20 if(self.reward<0) else self.reward
+        #reward=self.reward*20 if(self.reward<0) else self.reward
         if(self.output):
-            self.ensamble[self.columnName][self.history[self.currentObservation]['Date']]=action
+            self.ensamble.at[self.history[self.currentObservation]['Date'],self.columnName]=action
         
         
-        return state, reward, self.done, {}
+        return state, self.reward, self.done, {}
         
 
     def reset(self):

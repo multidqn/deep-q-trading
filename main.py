@@ -42,29 +42,29 @@ model.add(Activation('linear'))
 
 dqt = DeepQTrading(
     model=model,
-    explorations=[(0.1,50)],
+    explorations=[(0.1,5)],
     trainSize=datetime.timedelta(days=360*10),
     validationSize=datetime.timedelta(days=30*6),
     testSize=datetime.timedelta(days=30*6),
     outputFile="./Output/csv/walks/walks",
     begin=datetime.datetime(2004,1,1,0,0,0,0),
-    end=datetime.datetime(2018,2,28,0,0,0,0),
+    end=datetime.datetime(2018,2,22,0,0,0,0),
     nbActions=nb_actions,
     nOutput=15
     )
 
 
-
+"""
 try:
     dqt.run()
     bot.send_message(chat_id='@DeepQTrading', text="Finito senza errori -- "+str(datetime.datetime.now()))
 except: 
     bot.send_message(chat_id='@DeepQTrading', text="Finito con errori -- "+str(datetime.datetime.now()))
     bot.send_message(chat_id='@DeepQTrading', text="Errore: " + str(sys.exc_info()[0]))
+"""
 
 
-
-#dqt.run()
+dqt.run()
 
 
 bot.send_message(chat_id='@DeepQTrading', text="Ho impiegato "+str(datetime.datetime.now() - startingTime))

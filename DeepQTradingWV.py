@@ -32,11 +32,17 @@ class DeepQTrading:
         self.testSize=testSize
         self.walkSize=trainSize+validationSize+testSize
         self.endingPoint=end
+
+
+        self.dates= pd.read_csv('./dataset/sp500Hour.csv')
+
         self.sp = pd.read_csv('./dataset/sp500Hour.csv')
         self.sp['Datetime'] = pd.to_datetime(self.sp['Date'] + ' ' + self.sp['Time'])
         self.sp = self.sp.set_index('Datetime')
-        self.sp = self.sp.drop(['Date','Time'], axis=1)
+        self.sp = self.sp.drop(['Time','Date'], axis=1)
         self.sp = self.sp.index
+
+
         self.operationCost = operationCost
         self.trainer=ValidationCallback()
         self.validator=ValidationCallback()
@@ -84,10 +90,6 @@ class DeepQTrading:
         iteration=-1
 
         while(self.currentStartingPoint+self.walkSize <= self.endingPoint):
-            ensambleValid=pd.DataFrame(columns=['date'])
-            ensambleValid.set_index(['date'], drop=True, append=True, inplace=False, verify_integrity=False)
-            ensambleTest=pd.DataFrame(columns=['date'])
-            ensambleTest.set_index(['date'], drop=True, append=True, inplace=False, verify_integrity=False)
 
 
             iteration+=1
@@ -138,8 +140,11 @@ class DeepQTrading:
                 except:
                     self.currentStartingPoint+=datetime.timedelta(0,0,0,0,0,1,0)
 
-
-            #ydate=self.currentStartingPoint
+            
+            ensambleValid=pd.DataFrame(index=self.dates[validMinLimit:validMaxLimit].ix[:,'Date'].drop_duplicates().tolist())
+            ensambleTest=pd.DataFrame(index=self.dates[testMinLimit:testMaxLimit].ix[:,'Date'].drop_duplicates().tolist())
+            ensambleValid.index.name='Date'
+            ensambleTest.index.name='Date'
             for eps in self.explorations:
                 self.policy.eps = eps[0]
                 
@@ -206,7 +211,9 @@ class DeepQTrading:
 
             self.currentStartingPoint+=self.testSize
 
-            ensambleTest.to_csv("./Output/ensamble/walk"+str(iteration)+"ensamble.csv")
+            ensambleValid.to_csv("./Output/ensamble/walk"+str(iteration)+"ensamble_valid.csv")
+            
+            ensambleTest.to_csv("./Output/ensamble/walk"+str(iteration)+"ensamble_test.csv")
 
     def end(self):
         import os 
