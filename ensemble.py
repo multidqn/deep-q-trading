@@ -56,7 +56,7 @@ def ensemble(numWalks,perc,type,numDel):
         if perc==0:
             df=full_ensemble(df)
         else:
-            df=perc_ensemble(df,0.6)
+            df=perc_ensemble(df,perc)
 
         num=0
         rew=0
@@ -124,7 +124,7 @@ def evaluate(csvname=""):
                 
                 neg+= 0 if (dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 1
                 rew+=(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open']
-                doll+=(dax.at[date,'Close']-dax.at[date,'Open'])*25
+                doll+=(dax.at[date,'Close']-dax.at[date,'Open'])*50
                 cov+=1
             elif (i['ensemble']==-1):
                 
@@ -132,11 +132,11 @@ def evaluate(csvname=""):
                 pos+= 1 if -(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 0
                 rew+=-(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open']
                 cov+=1
-                doll+=-(dax.at[date,'Close']-dax.at[date,'Open'])*25
+                doll+=-(dax.at[date,'Close']-dax.at[date,'Open'])*50
     
     output.write(str(0)+ "," + str(round(rew,2))+ "," + str(round(pos,2))+ "," + str(round(neg,2))+ "," + str(round(doll,2))+ "," + str(round(cov/num,2))+ "," +(str(round(pos/cov,2)) if (cov>0) else "") + "\n")
 
 
 
 
-evaluate("finalEnsembleSP500.csv")
+evaluate(".\Output\results\finalEnsembleSP500.csv")

@@ -15,8 +15,14 @@ import telegram
 MK="sp500"
 
 class DeepQTrading:
-    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, nOutput=1, operationCost=0):
-        self.bot = telegram.Bot(token='864997856:AAFjYS9qw9Gd3L_AwYGBPdhE7w-SWxf-JjU')
+    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, nOutput=1, operationCost=0,telegramToken="",telegramChatID=""):
+        if(telegramToken!="" and telegramChatID!=""):
+            self.chatID=telegramChatID
+            self.telegramOutput=True
+            try:
+                self.bot = telegram.Bot(token=telegramToken)
+        else:
+            self.telegramOutput=True
 
         self.policy = EpsGreedyQPolicy()
         self.explorations=explorations
@@ -94,7 +100,8 @@ class DeepQTrading:
 
 
             iteration+=1
-            self.bot.send_message(chat_id='@DeepQTrading', text="Iterazione "+str(iteration + 1 )+" iniziata.")
+            if(self.telegramOutput):
+                self.bot.send_message(chat_id=self.chatID, text="Iteration "+str(iteration + 1 )+" started.")
             
             
             del(self.memory)

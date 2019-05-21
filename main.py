@@ -17,13 +17,17 @@ import sys
 import telegram
 
 
-bot = telegram.Bot(token='864997856:AAFjYS9qw9Gd3L_AwYGBPdhE7w-SWxf-JjU')
+
+telegramToken='864997856:AAFjYS9qw9Gd3L_AwYGBPdhE7w-SWxf-JjU'
+telegramChatID='@DeepQTrading'
+
+bot = telegram.Bot(token=telegramToken)
 
 startingTime=datetime.datetime.now()
 
-bot.send_message(chat_id='@DeepQTrading', text="Esperimento Iniziato "+str(datetime.datetime.now()))
+bot.send_message(chat_id=telegramChatID, text="Experiment started "+str(datetime.datetime.now()))
 
-nb_actions = 2
+nb_actions = 3
 
 model = Sequential()
 model.add(Flatten(input_shape=(1,1,68)))
@@ -46,23 +50,25 @@ dqt = DeepQTrading(
     begin=datetime.datetime(2010,1,1,0,0,0,0),
     end=datetime.datetime(2019,2,22,0,0,0,0),
     nbActions=nb_actions,
-    nOutput=20
+    nOutput=20,
+    telegramToken=telegramToken,
+    telegramChatID=telegramChatID
     )
 
 
 
 try:
     dqt.run()
-    bot.send_message(chat_id='@DeepQTrading', text="Finito senza errori -- "+str(datetime.datetime.now()))
+    bot.send_message(chat_id=telegramChatID, text="Experiment ended without errors -- "+str(datetime.datetime.now()))
 except: 
-    bot.send_message(chat_id='@DeepQTrading', text="Finito con errori -- "+str(datetime.datetime.now()))
-    bot.send_message(chat_id='@DeepQTrading', text="Errore: " + str(sys.exc_info()[0]))
+    bot.send_message(chat_id=telegramChatID, text="Experiment ended with errors -- "+str(datetime.datetime.now()))
+    bot.send_message(chat_id=telegramChatID, text="Exception: " + str(sys.exc_info()[0]))
 
 
 #dqt.run()
 
-
-bot.send_message(chat_id='@DeepQTrading', text="Ho impiegato "+str(datetime.datetime.now() - startingTime))
+try:
+    bot.send_message(chat_id=telegramChatID, text="The experiment took "+str(datetime.datetime.now() - startingTime))
 
 
 dqt.end()
