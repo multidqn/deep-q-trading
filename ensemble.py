@@ -14,7 +14,7 @@ def full_ensemble(df):
     # Prevengo sovrascritture di memoria
     local_df = df.copy()
     # Creo una nuova colonna ensemble, mettendo ad 1 se tutte le colonne sono a 1, -1 se sono tutte a 0, 0 altrimenti
-    local_df['ensemble'] = np.select([m1, m2], [1, -1], 0)
+    local_df['ensemble'] = np.select([m1, m2], [1, 2], 0)
 
     # rimuovo tutte le colonne e lascio una sola colonna ensemble che contiene solamente l'operazione da fare (1, -1, 0)
     local_df = local_df.drop(local_df.columns.difference(['ensemble']), axis=1)
@@ -31,34 +31,84 @@ def perc_ensemble(df, thr = 0.7):
     return m
 
 
+def ensemble(numWalks,perc,type,numDel):
+    dollSum=0
+    rewSum=0
+    posSum=0
+    negSum=0
+    covSum=0
+    numSum=0
 
-# df=pd.read_csv("./Output/ensamble/walk0ensamble_test.csv",index_col='Date')
-# fulldf=full_ensemble(df)
-# for j in range(1,7):
-#     df=pd.read_csv("./Output/ensamble/walk"+str(j)+"ensamble_test.csv",index_col='Date')
-#     fulldf=fulldf.append(full_ensemble(df))
+    values=[]
+    #output=open("daxValidDel9th60.csv","w+")
+    #output.write("Iteration,Reward%,#Wins,#Losses,Euro,Coverage,Accuracy\n")
+    columns = ["Iteration","Reward%","#Wins","#Losses","Dollars","Coverage","Accuracy"]
+    dax=pd.read_csv("./dataset/daxDay.csv",index_col='Date')
+    for j in range(0,numWalks):
 
-# fulldf.to_csv("resultEnsembleTest.csv")
-# fulldf=pd.read_csv("resultEnsembleTest.csv")
-# fulldf['Date'] = pd.to_datetime(fulldf['Date'])
-# fulldf = fulldf.set_index('Date')
-# print(fulldf.head())
-# fulldf.to_csv("output.csv")
+        df=pd.read_csv("./Output/ensamble/walk"+str(j)+"ensamble_"+type+".csv",index_col='Date')
 
 
 
+        for deleted in range(1,numDel):
+            del df['iteration'+str(deleted)]
+        
+        if perc==0:
+            df=full_ensemble(df)
+        else:
+            df=perc_ensemble(df,0.6)
+
+        num=0
+        rew=0
+        pos=0
+        neg=0
+        doll=0
+        cov=0
+        for date, i in df.iterrows():
+            num+=1
+
+            if date in dax.index:
+                if (i['ensemble']==1):
+                    pos+= 1 if (dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 0
+                    
+                    neg+= 0 if (dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 1
+                    rew+=(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open']
+                    doll+=(dax.at[date,'Close']-dax.at[date,'Open'])*50
+                    cov+=1
+                elif (i['ensemble']==2):
+                    
+                    neg+= 0 if -(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 1
+                    pos+= 1 if -(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 0
+                    rew+=-(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open']
+                    cov+=1
+                    doll+=-(dax.at[date,'Close']-dax.at[date,'Open'])*50
+        
+        values.append([str(round(j,2)),str(round(rew,2)),str(round(pos,2)),str(round(neg,2)),str(round(doll,2)),str(round(cov/num,2)),(str(round(pos/cov,2)) if (cov>0) else "")])
+        
+        dollSum+=doll
+        rewSum+=rew
+        posSum+=pos
+        negSum+=neg
+        covSum+=cov
+        numSum+=num
+
+
+    values.append(["sum",str(round(rewSum,2)),str(round(posSum,2)),str(round(negSum,2)),str(round(dollSum,2)),str(round(covSum/numSum,2)),(str(round(posSum/covSum,2)) if (covSum>0) else "")])
+    return values,columns
 
 
 
-res = open("risultatiEnsembleTest.csv", "w+")
-res.write("walk,reward,coverage,accuracy,positivi,negativi,dollari\n")
 
-for j in range(0,7):
-    df=pd.read_csv("./Output/ensamble/walk"+str(j)+"ensamble_test.csv",index_col='Date')
-    df=perc_ensemble(df)
-
-    print(df.head(10))
-    dax=pd.read_csv("./dataset/sp500Day.csv",index_col='Date')
+def evaluate(csvname=""):
+    
+    output=open("resultsSPFinal.csv","w+")
+    output.write("Iteration,Reward%,#Wins,#Losses,Euro,Coverage,Accuracy\n")
+    df=pd.read_csv(csvname)
+    dax=pd.read_csv("./dataset/daxDay.csv",index_col='Date')
+    df['date'] = pd.to_datetime(df['date'])
+    df['date'] = df['date'].dt.strftime('%m/%d/%Y')
+    df.set_index('date', inplace=True)
+    print(df)
     num=0
     rew=0
     pos=0
@@ -74,27 +124,19 @@ for j in range(0,7):
                 
                 neg+= 0 if (dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 1
                 rew+=(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open']
-                doll+=(dax.at[date,'Close']-dax.at[date,'Open'])*50
+                doll+=(dax.at[date,'Close']-dax.at[date,'Open'])*25
                 cov+=1
-            elif (i['ensemble']==2):
+            elif (i['ensemble']==-1):
                 
                 neg+= 0 if -(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 1
                 pos+= 1 if -(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open'] > 0 else 0
                 rew+=-(dax.at[date,'Close']-dax.at[date,'Open'])/dax.at[date,'Open']
                 cov+=1
-                doll+=-(dax.at[date,'Close']-dax.at[date,'Open'])*50
+                doll+=-(dax.at[date,'Close']-dax.at[date,'Open'])*25
+    
+    output.write(str(0)+ "," + str(round(rew,2))+ "," + str(round(pos,2))+ "," + str(round(neg,2))+ "," + str(round(doll,2))+ "," + str(round(cov/num,2))+ "," +(str(round(pos/cov,2)) if (cov>0) else "") + "\n")
 
 
-    print("reward "+ str(rew))
 
-    print ("coverage " + str(cov/num))
 
-    print ("accuracy " + str(pos/cov))
-
-    print("positives "+ str(pos))
-
-    print("negatives "+ str(neg))
-
-    print ("doll " + str(doll) )
-
-    res.write(str(j)+","+str(rew)+","+str(cov/num)+","+str(pos/cov)+","+str(pos)+","+str(neg)+","+str(doll)+"\n")
+evaluate("finalEnsembleSP500.csv")

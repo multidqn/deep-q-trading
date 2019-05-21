@@ -1,6 +1,7 @@
-import os
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
-os.environ["CUDA_VISIBLE_DEVICES"]="1";
+
+# import os
+# os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
+# os.environ["CUDA_VISIBLE_DEVICES"]="1";
 
 
 from DeepQTradingWV import DeepQTrading
@@ -22,16 +23,12 @@ startingTime=datetime.datetime.now()
 
 bot.send_message(chat_id='@DeepQTrading', text="Esperimento Iniziato "+str(datetime.datetime.now()))
 
-nb_actions = 3
+nb_actions = 2
 
 model = Sequential()
-model.add(Flatten(input_shape=(25,1,68)))
-model.add(Dense(256,activation='linear'))
+model.add(Flatten(input_shape=(1,1,68)))
+model.add(Dense(35,activation='linear'))
 model.add(LeakyReLU(alpha=.001))
-model.add(Dense(512,activation='linear'))
-model.add(LeakyReLU(alpha=.001)) 
-model.add(Dense(256,activation='linear'))
-model.add(LeakyReLU(alpha=.001)) 
 model.add(Dense(nb_actions))
 model.add(Activation('linear'))
 
@@ -41,15 +38,15 @@ model.add(Activation('linear'))
 
 dqt = DeepQTrading(
     model=model,
-    explorations=[(0.1,50)],
+    explorations=[(0.2,100)],
     trainSize=datetime.timedelta(days=360*5),
     validationSize=datetime.timedelta(days=30*6),
     testSize=datetime.timedelta(days=30*6),
     outputFile="./Output/csv/walks/walks",
-    begin=datetime.datetime(2005,1,1,0,0,0,0),
-    end=datetime.datetime(2018,2,22,0,0,0,0),
+    begin=datetime.datetime(2010,1,1,0,0,0,0),
+    end=datetime.datetime(2019,2,22,0,0,0,0),
     nbActions=nb_actions,
-    nOutput=15
+    nOutput=20
     )
 
 

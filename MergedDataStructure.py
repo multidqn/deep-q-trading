@@ -15,14 +15,14 @@ class MergedDataStructure():
         High = timeserie.ix[:, 'High'].tolist()
         Low = timeserie.ix[:, 'Low'].tolist()
         Close = timeserie.ix[:, 'Close'].tolist()
-        Volume = timeserie.ix[:, 'Volume'].tolist()
+        #Volume = timeserie.ix[:, 'Volume'].tolist()
 
         self.list=[]
         self.dict={}
         limit = len(Date)
 
         for i in range(0,limit-1):
-            self.list.append({'Date' : Date[i],'Time' : Time[i], 'Open': Open[i], 'High': High[i], 'Low': Low[i], 'Close': Close[i], 'Volume': Volume[i] })
+            self.list.append({'Date' : Date[i],'Time' : Time[i], 'Open': Open[i], 'High': High[i], 'Low': Low[i], 'Close': Close[i]})
             
             dateList = [datetime.datetime.strptime(Date[i+1], "%m/%d/%Y") - datetime.timedelta(days=x) for x in range(0, ( datetime.datetime.strptime(Date[i+1], "%m/%d/%Y")- datetime.datetime.strptime(Date[i], "%m/%d/%Y") ).days )]
             for date in dateList:

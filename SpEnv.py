@@ -6,6 +6,7 @@ from datetime import datetime
 from MergedDataStructure import MergedDataStructure
 import Callback
 
+MK = "sp500"
 
 class SpEnv(gym.Env):
     
@@ -14,17 +15,17 @@ class SpEnv(gym.Env):
     def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, ensamble = None, callback = None, columnName = "iteration-1"):
         self.episodio=1
 
-        spTimeserie = pandas.read_csv('./dataset/sp500Hour.csv')[minLimit:maxLimit] # opening the dataset
+        spTimeserie = pandas.read_csv('./dataset/'+MK+'Hour.csv')[minLimit:maxLimit] # opening the dataset
         Date = spTimeserie.ix[:, 'Date'].tolist()
         Time = spTimeserie.ix[:, 'Time'].tolist()
         Open = spTimeserie.ix[:, 'Open'].tolist()
         High = spTimeserie.ix[:, 'High'].tolist()
         Low = spTimeserie.ix[:, 'Low'].tolist()
         Close = spTimeserie.ix[:, 'Close'].tolist()
-        Volume = spTimeserie.ix[:, 'Volume'].tolist()
+        #Volume = spTimeserie.ix[:, 'Volume'].tolist()
 
-        self.weekData = MergedDataStructure(delta=8,filename="./dataset/sp500Week.csv")# this DS allows me to obtain previous historical data with different resolution
-        self.dayData = MergedDataStructure(delta=20,filename="./dataset/sp500Day.csv")#  with low computational complexity
+        self.weekData = MergedDataStructure(delta=8,filename="./dataset/"+MK+"Week.csv")# this DS allows me to obtain previous historical data with different resolution
+        self.dayData = MergedDataStructure(delta=20,filename="./dataset/"+MK+"Day.csv")#  with low computational complexity
         
         
         self.output=False
@@ -49,7 +50,7 @@ class SpEnv(gym.Env):
         self.done = False
         self.limit = len(Open)
         for i in range(0,self.limit): # organizing the dataset as a list of dictionaries
-            self.history.append({'Date' : Date[i],'Time' : Time[i], 'Open': Open[i], 'High': High[i], 'Low': Low[i], 'Close': Close[i], 'Volume': Volume[i] })
+            self.history.append({'Date' : Date[i],'Time' : Time[i], 'Open': Open[i], 'High': High[i], 'Low': Low[i], 'Close': Close[i]})
         
         self.nextObservation=0
         # print(self.currentObservation)

@@ -1,15 +1,20 @@
+from matplotlib.backends.backend_pdf import PdfPages
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+from math import floor
+from ensemble import ensemble
 
 
 numPlots=11
 outputFile=str(sys.argv[1])+".pdf"
+
+pdf=PdfPages(outputFile)
 numFiles=int(sys.argv[2])
 plt.figure(figsize=(5*(numFiles+1),numPlots*5)) 
 for i in range(1,numFiles+1):
-    document = pd.read_csv("walks"+str(i)+".csv")
+    document = pd.read_csv("./Output/csv/walks/walks"+str(i)+".csv")
     plt.subplot(numPlots,numFiles,0*numFiles + i )
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testAccuracy'].tolist(),'r',label='Test')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'trainAccuracy'].tolist(),'b',label='Train')
@@ -175,19 +180,148 @@ for i in range(1,numFiles+1):
     plt.title('Short Precision')
 
 
-plt.suptitle("Esperimento 7:\n"
+plt.suptitle("Esperimento SP500 5 (Only long):\n"
             +"Target model update: 1e-1\n"
-            +"Model: 256-512-256\n"
-            +"Memory-Window Length: 5000-2\n"
-            +"Train length: 10 Years\n"
+            +"Model: 35 neurons single layer\n"
+            +"Memory-Window Length: 10000-1\n"
+            +"Train length: 5 Years\n"
             +"Validation length: 6 Months\n"
             +"Test lenght: 6 Months\n"
-            +"Starting period: 2004-01-01\n"
-            +"Other changes: negative rewards are multiplied by 50 (previous was 5)"
+            +"Starting period: 2010-01-01\n"
+            +"Other changes: Does only Long actions"
             ,size=30
             ,weight=3
             ,ha='left'
             ,x=0.1
             ,y=0.99)
 
-plt.savefig(outputFile,dpi=700)
+pdf.savefig()
+
+
+
+i=1
+
+###########-------------------------------------------------------------------|Tabella Ensemble|-------------------
+x=2
+y=1
+plt.figure(figsize=(x*5,y*5))
+
+
+#for i in range(1,floor(x*y/2)+1):
+plt.subplot(y,x,i)
+plt.axis('off')
+
+val,col=ensemble(numFiles,0,"valid",0)
+
+
+t=plt.table(cellText=val, colLabels=col, fontsize=30, loc='center')
+t.auto_set_font_size(False)
+t.set_fontsize(6)
+plt.title("Valid")
+
+
+
+
+plt.subplot(y,x,i+1)
+plt.axis('off')
+
+val,col=ensemble(numFiles,0,"test",0)
+
+
+t=plt.table(cellText=val, colLabels=col, fontsize=30, loc='center')
+t.auto_set_font_size(False)
+t.set_fontsize(6)
+plt.title("Test")
+
+
+plt.suptitle("FULL ENSEMBLE")
+pdf.savefig()
+
+
+###########--------------------------------------------------------------------------------------------------------------------
+
+
+###########-------------------------------------------------------------------|Tabella Ensemble|-------------------
+x=2
+y=1
+plt.figure(figsize=(x*5,y*5))
+
+
+#for i in range(1,floor(x*y/2)+1):
+plt.subplot(y,x,i)
+plt.axis('off')
+
+val,col=ensemble(numFiles,0.9,"valid",0)
+
+
+t=plt.table(cellText=val, colLabels=col, fontsize=30, loc='center')
+t.auto_set_font_size(False)
+t.set_fontsize(6)
+plt.title("Valid")
+
+
+
+
+plt.subplot(y,x,i+1)
+plt.axis('off')
+
+val,col=ensemble(numFiles,0.9,"test",0)
+
+
+t=plt.table(cellText=val, colLabels=col, fontsize=30, loc='center')
+t.auto_set_font_size(False)
+t.set_fontsize(6)
+plt.title("Test")
+
+
+plt.suptitle("90% ENSEMBLE")
+pdf.savefig()
+
+
+###########--------------------------------------------------------------------------------------------------------------------
+
+
+###########-------------------------------------------------------------------|Tabella Ensemble|-------------------
+x=2
+y=1
+plt.figure(figsize=(x*5,y*5))
+
+
+#for i in range(1,floor(x*y/2)+1):
+plt.subplot(y,x,i)
+plt.axis('off')
+
+val,col=ensemble(numFiles,0.8,"valid",0)
+
+
+t=plt.table(cellText=val, colLabels=col, fontsize=30, loc='center')
+t.auto_set_font_size(False)
+t.set_fontsize(6)
+plt.title("Valid")
+
+
+
+
+plt.subplot(y,x,i+1)
+plt.axis('off')
+
+val,col=ensemble(numFiles,0.8,"test",0)
+
+
+t=plt.table(cellText=val, colLabels=col, fontsize=30, loc='center')
+t.auto_set_font_size(False)
+t.set_fontsize(6)
+plt.title("Test")
+
+
+plt.suptitle('80% ENSEMBLE')
+pdf.savefig()
+
+
+###########--------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+pdf.close()

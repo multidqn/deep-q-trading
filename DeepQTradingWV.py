@@ -12,6 +12,7 @@ import pandas as pd
 import datetime
 import telegram
 
+MK="sp500"
 
 class DeepQTrading:
     def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, nOutput=1, operationCost=0):
@@ -21,7 +22,7 @@ class DeepQTrading:
         self.explorations=explorations
         self.nbActions=nbActions
         self.model=model
-        self.memory = SequentialMemory(limit=5000, window_length=25)
+        self.memory = SequentialMemory(limit=10000, window_length=1)
         self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=200, target_model_update=1e-1,
                                     enable_double_dqn=True,enable_dueling_network=True)
         self.agent.compile(Adam(lr=1e-3), metrics=['mae'])
@@ -34,9 +35,9 @@ class DeepQTrading:
         self.endingPoint=end
 
 
-        self.dates= pd.read_csv('./dataset/sp500Hour.csv')
+        self.dates= pd.read_csv('./dataset/'+MK+'Hour.csv')
 
-        self.sp = pd.read_csv('./dataset/sp500Hour.csv')
+        self.sp = pd.read_csv('./dataset/'+MK+'Hour.csv')
         self.sp['Datetime'] = pd.to_datetime(self.sp['Date'] + ' ' + self.sp['Time'])
         self.sp = self.sp.set_index('Datetime')
         self.sp = self.sp.drop(['Time','Date'], axis=1)
@@ -98,7 +99,7 @@ class DeepQTrading:
             
             del(self.memory)
             del(self.agent)
-            self.memory = SequentialMemory(limit=5000, window_length=25)
+            self.memory = SequentialMemory(limit=10000, window_length=1)
             self.agent = DQNAgent(model=self.model, policy=self.policy,  nb_actions=self.nbActions, memory=self.memory, nb_steps_warmup=200, target_model_update=1e-1,
                                     enable_double_dqn=True,enable_dueling_network=True)
             self.agent.compile(Adam(lr=1e-3), metrics=['mae'])
@@ -208,7 +209,7 @@ class DeepQTrading:
                         str(testShortAcc)+","+
                         str(testLongPrec)+","+
                         str(testShortPrec)+"\n")
-
+            self.outputFile[iteration].close()
             self.currentStartingPoint+=self.testSize
 
             ensambleValid.to_csv("./Output/ensamble/walk"+str(iteration)+"ensamble_valid.csv")
