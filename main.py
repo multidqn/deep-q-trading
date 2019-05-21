@@ -4,7 +4,7 @@
 # os.environ["CUDA_VISIBLE_DEVICES"]="1";
 
 
-from DeepQTradingWV import DeepQTrading
+from DeepQTrading import DeepQTrading
 import datetime
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten

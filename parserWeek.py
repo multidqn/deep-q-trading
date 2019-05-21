@@ -17,7 +17,7 @@ records = []
 limit = len(Open)
 for i in range(0,limit):
     records.append({'Date' : Date[i],'Time' : Time[i], 'Open': Open[i], 'High': High[i], 'Low': Low[i], 'Close': Close[i], 'Volume': Volume[i] })
-
+close=0
 opeN = records[0]['Open']
 low = records[0]['Low']
 high = records[0]['High']
