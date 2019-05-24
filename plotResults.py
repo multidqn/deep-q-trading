@@ -6,7 +6,8 @@ import sys
 from math import floor
 from ensemble import ensemble
 
-
+#Call it with the name of file plus the number of walks
+# python plotResults.py results 2 
 numPlots=11
 outputFile=str(sys.argv[1])+".pdf"
 
