@@ -22,6 +22,7 @@ def full_ensemble(df):
     return local_df
 
 # Calcola l'ensemable sulle colonne (reti) con una % di agreement
+#WE Can change the threshold of 
 def perc_ensemble(df, thr = 0.7):
     c1 = (df.eq(1).sum(1) / df.shape[1]).gt(thr)
     c2 = (df.eq(2).sum(1) / df.shape[1]).gt(thr)
@@ -43,7 +44,7 @@ def ensemble(numWalks,perc,type,numDel):
     #output=open("daxValidDel9th60.csv","w+")
     #output.write("Iteration,Reward%,#Wins,#Losses,Euro,Coverage,Accuracy\n")
     columns = ["Iteration","Reward%","#Wins","#Losses","Dollars","Coverage","Accuracy"]
-    dax=pd.read_csv("./dataset/daxDay.csv",index_col='Date')
+    dax=pd.read_csv("./dataset/sp500Day.csv",index_col='Date')
     for j in range(0,numWalks):
 
         df=pd.read_csv("./Output/ensamble/walk"+str(j)+"ensamble_"+type+".csv",index_col='Date')
@@ -104,7 +105,7 @@ def evaluate(csvname=""):
     output=open("resultsSPFinal.csv","w+")
     output.write("Iteration,Reward%,#Wins,#Losses,Euro,Coverage,Accuracy\n")
     df=pd.read_csv(csvname)
-    dax=pd.read_csv("./dataset/daxDay.csv",index_col='Date')
+    dax=pd.read_csv("./dataset/sp500Day.csv",index_col='Date')
     df['date'] = pd.to_datetime(df['date'])
     df['date'] = df['date'].dt.strftime('%m/%d/%Y')
     df.set_index('date', inplace=True)
