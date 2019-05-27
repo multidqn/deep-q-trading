@@ -1,13 +1,13 @@
-#Imports the SPEnv library, which will perform the Agent actions itself
+#Imports the SPEnv library, which will perform the Agent actions themselves
 from SpEnv import SpEnv
 
-#Callback used to print results at each episode
+#Callback used to print the results at each episode
 from Callback import ValidationCallback
 
 #Keras library for the NN considered
 from keras.models import Sequential
 
-#Keras libraries for layers, activation and optimizer used
+#Keras libraries for layers, activations and optimizers used
 from keras.layers import Dense, Activation, Flatten
 from keras.layers.advanced_activations import LeakyReLU, PReLU
 from keras.optimizers import Adam
@@ -17,7 +17,7 @@ from rl.agents.dqn import DQNAgent
 from rl.memory import SequentialMemory
 from rl.policy import EpsGreedyQPolicy
 
-#Mathematical operation used later
+#Mathematical operations used later
 from math import floor
 
 #Library to manipulate the dataset in a csv file
@@ -29,13 +29,14 @@ import datetime
 #Library used 
 import telegram
 
+#Prefix of the name of the market (S&P500) files used to load the data
 MK="sp500"
 
 class DeepQTrading:
     
     #Class constructor
     #model: Keras model considered
-    #Explorations is a vector containing the policy of the probability of random predictions plus how many epochs will be 
+    #Explorations is a vector containing (i) probability of random predictions; (ii) how many epochs will be 
     # runned by the algorithm (we run the algorithm several times-several iterations)  
     #trainSize: size of the training set
     #validationSize: size of the validation set
@@ -44,11 +45,10 @@ class DeepQTrading:
     #begin: Initial date
     #end: final date
     #nbActions: number of decisions (0-Hold 1-Long 2-Short) 
-    #nOutput is the number of walks. Tonio put 20 but it is 5 walks in reality.  
-    #operationCost: Price for the transaction
+    #nOutput is the number of walks. We are doing 5 walks.  
+    #operationCost: Price for the transaction (we set they are free)
     #telegramToken: token used for the bot that will send messages
     #telegramChatID: ID of messager receiver in Telegram
-    #ensemble.py runs the ensemble
     def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, nOutput=1, operationCost=0,telegramToken="",telegramChatID=""):
         
         #If the telegram token for the bot and the telegram id of the receiver are empty, try to send a message 
@@ -89,7 +89,7 @@ class DeepQTrading:
         self.currentStartingPoint = begin
 
         #Define the training, validation and testing size as informed by the call
-        #Train: five years
+        #Train: 5 years
         #Validation: 6 months
         #Test: 6 months
         self.trainSize=trainSize
@@ -104,37 +104,34 @@ class DeepQTrading:
 
         #Read the hourly dataset
         #We join data from different files
-        #Here read hour 
+        #Here hour data is read 
         self.dates= pd.read_csv('./dataset/'+MK+'Hour.csv')
-
-        #Read the hourly dataset
         self.sp = pd.read_csv('./dataset/'+MK+'Hour.csv')
         #Convert the pandas format to date and time format
         self.sp['Datetime'] = pd.to_datetime(self.sp['Date'] + ' ' + self.sp['Time'])
-        #Set an index to Datetime on the pandas loaded dataset. Register will be indexes through this value
+        #Set an index to Datetime on the pandas loaded dataset. Registers will be indexes through these values
         self.sp = self.sp.set_index('Datetime')
         #Drop Time and Date from the Dataset
         self.sp = self.sp.drop(['Time','Date'], axis=1)
-        #Just the index will be important, because date and time will be used to define the train, validation and test 
-        #for each walk
+        #Just the index considering date and time will be important, because date and time will be used to define the train, 
+        #validation and test for each walk
         self.sp = self.sp.index
 
-        #Receives the operation cost which is 0
+        #Receives the operation cost, which is 0
         #Operation cost is the cost for long and short. It is defined as zero
         self.operationCost = operationCost
         
-        #Call the callback for training, validation and test in order to show the results for each episode 
+        #Call the callback for training, validation and test in order to show results for each episode 
         self.trainer=ValidationCallback()
         self.validator=ValidationCallback()
         self.tester=ValidationCallback()
         
-        #Initiate the output file
+        #Initiates the output file
         self.outputFile=[]
         
         #Write in the file
         for i in range(0,nOutput):
-            
-          
+           
             self.outputFile.append(open(outputFile+str(i+1)+".csv", "w+"))
 
             #Write the fields in the file
@@ -173,7 +170,7 @@ class DeepQTrading:
 
     def run(self):
 
-        #Initiate the training, 
+        #Initiates the environments, 
         trainEnv=validEnv=testEnv=" "
 
         iteration=-1
@@ -183,7 +180,7 @@ class DeepQTrading:
         #currentStarting point begins with begin date
         while(self.currentStartingPoint+self.walkSize <= self.endingPoint):
 
-            #Iteration is a walks
+            #Iteration is the current walk
             iteration+=1
 
             #Send to the receiver the current walk
@@ -227,8 +224,7 @@ class DeepQTrading:
                     self.currentStartingPoint+=datetime.timedelta(0,0,0,0,0,1,0)
             
             ########################################VALIDATION STAGE#######################################################
-            
-            #The ValidMinLimit will be loaded as the TrainMax limit
+            #The ValidMinLimit will be loaded as the next element of the TrainMax limit
             validMinLimit=trainMaxLimit+1
 
             #The ValidMaxLimit will be loaded as the interval after the begin + train size +validation size
@@ -241,7 +237,7 @@ class DeepQTrading:
                     self.currentStartingPoint+=datetime.timedelta(0,0,0,0,0,1,0)
 
             ########################################TESTING STAGE######################################################## 
-            #The TestMinLimit will be loaded as the ValidMaxlimit 
+            #The TestMinLimit will be loaded as the next element of ValidMaxlimit 
             testMinLimit=validMaxLimit+1
 
             #The testMaxLimit will be loaded as the interval after the begin + train size +validation size + Testsize
@@ -261,15 +257,14 @@ class DeepQTrading:
             #Put the name of the index for validation and testing
             ensambleValid.index.name='Date'
             ensambleTest.index.name='Date'
-            
            
-            #Explorations are epochs, 
+            #Explorations are epochs considered, or how many times the agent will play the game.  
             for eps in self.explorations:
 
                 #policy will be 0.2, so the randomness of predictions (actions) will happen with 20% of probability 
                 self.policy.eps = eps[0]
                 
-                #there will be 100 iterations, or eps[1])
+                #there will be 100 iterations (epochs), or eps[1])
                 for i in range(0,eps[1]):
                     
                     del(trainEnv)
@@ -355,8 +350,8 @@ class DeepQTrading:
             #the previous walk   
             self.currentStartingPoint+=self.testSize
 
-            #Write validation and Testing Data into files
-            #Save the files for processing later with the ensemble
+            #Write validation and Testing data into files
+            #Save the files for processing later with the ensemble considering the 100 epochs
             ensambleValid.to_csv("./Output/ensemble/walk"+str(iteration)+"ensemble_valid.csv")
             ensambleTest.to_csv("./Output/ensemble/walk"+str(iteration)+"ensemble_test.csv")
 
@@ -367,5 +362,3 @@ class DeepQTrading:
         #Close the files where the results were written 
         for outputFile in self.outputFile:
             outputFile.close()
-
-
