@@ -26,15 +26,15 @@ from rl.agents.dqn import DQNAgent
 from rl.memory import SequentialMemory
 from rl.policy import EpsGreedyQPolicy
 
-#Telegram library used to send feedback about the code being running
+#Telegram library used to send feedback about the script being runned
 import telegram
 
 #Library used for showing the exception in the case of error 
 import sys
 
 #Data regarding the bot and destination used for messages
-telegramToken='595473341:AAF4AWKpxwNIMDDQ7XrvI0-nPT2d_UY3aoQ'
-telegramChatID='843683126'
+telegramToken='PUT HERE YOUR TELEGRAM TOKEN'
+telegramChatID='PUT HERE YOUR TELEGRAM CHAT ID'
 
 #Declare Telegram bot to be used
 bot = telegram.Bot(token=telegramToken)
@@ -46,18 +46,16 @@ bot.send_message(chat_id=telegramChatID, text="Experiment started "+str(datetime
 #There are three actions possible in the stock market
 #Hold(id 0): do nothing.
 #Long(id 1): It predicts that the stock market value will raise at the end of the day. 
-#So, the action performed in this case is buying at the beginning of the day and sell it at the end of the day
+#So, the action performed in this case is buying at the beginning of the day and sell it at the end of the day (aka long).
 #Short(id 2): It predicts that the stock market value will decrease at the end of the day.
-#So, the action that must be done is selling at the beginning of the day and buy it at the end of the day. 
+#So, the action that must be done is selling at the beginning of the day and buy it at the end of the day (aka short). 
 nb_actions = 3
-
-
 
 #This is a simple NN considered. It is composed of:
 #One flatten layer to get 68 dimensional vectors as input
 #One dense layer with 35 neurons and LeakyRelu activation
 #One final Dense Layer with the 3 actions considered
-#the input is 20 observation days from the past, 8 observations from the past weekd and 
+#the input is 20 observation days from the past, 8 observations from the past week and 
 #40 observations from the past hours
 model = Sequential()
 model.add(Flatten(input_shape=(1,1,68)))
@@ -69,11 +67,11 @@ model.add(Activation('linear'))
 
 #Define the DeepQTrading class with the following parameters:
 #explorations: 0.2 operations are random, and 100 epochs.
-#in this case, epochs is used because the Agent acts on dayli basis, so its better to repeat the experiments several times
-#so, its defined that each epoch will work on the data from training.
-#trainSize: the size of the train data got from dataset, we are setting 5 stock market years, or 1800 days
-#validationSize: the size of the validation data got from dataset, we are setting 6 stock market months, or 180 days
-#testSize: the size of the testing data got from dataset, we are setting 6 stock market months, or 180 days
+#in this case, epochs parameter is used because the Agent acts on daily basis, so its better to repeat the experiments several
+#times so, its defined that each epoch will work on the data from training, validation and testing.
+#trainSize: the size of the train data gotten from the dataset, we are setting 5 stock market years, or 1800 days
+#validationSize: the size of the validation data gotten from dataset, we are setting 6 stock market months, or 180 days
+#testSize: the size of the testing data gotten from dataset, we are setting 6 stock market months, or 180 days
 #outputFile: where the results will be written
 #begin: where the walks will start from. We are defining January 1st of 2010
 #end: where the walks will finish. We are defining February 22nd of 2019
@@ -104,6 +102,7 @@ except:
     bot.send_message(chat_id=telegramChatID, text="Exception: " + str(sys.exc_info()[0]))
 
 dqt.end()
+
 #Then, it will send to the destination how long the experiment took
 try:
     bot.send_message(chat_id=telegramChatID, text="The experiment took "+str(datetime.datetime.now() - startingTime))
