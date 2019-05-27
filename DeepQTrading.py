@@ -49,7 +49,7 @@ class DeepQTrading:
     #operationCost: Price for the transaction (we set they are free)
     #telegramToken: token used for the bot that will send messages
     #telegramChatID: ID of messager receiver in Telegram
-    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, nOutput=1, operationCost=0,telegramToken="",telegramChatID=""):
+    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, operationCost=0,telegramToken="",telegramChatID=""):
         
         #If the telegram token for the bot and the telegram id of the receiver are empty, try to send a message 
         #otherwise print error

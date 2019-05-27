@@ -1,7 +1,7 @@
-#os library is used to define the GPU to be used by the code
-import os
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
-os.environ["CUDA_VISIBLE_DEVICES"]="1";
+#os library is used to define the GPU to be used by the code, needed only in cerain situations (Better not to use it, use only if the main gpu is Busy)
+# import os
+# os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
+# os.environ["CUDA_VISIBLE_DEVICES"]="1";
 
 #This is the class call for the Agent which will perform the experiment
 from DeepQTrading import DeepQTrading
@@ -32,9 +32,9 @@ import telegram
 #Library used for showing the exception in the case of error 
 import sys
 
-#Data regarding the bot and destination used for messages
-telegramToken='PUT HERE YOUR TELEGRAM TOKEN'
-telegramChatID='PUT HERE YOUR TELEGRAM CHAT ID'
+from telegramSettings import telegramToken
+from telegramSettings import telegramChatID
+
 
 #Declare Telegram bot to be used
 bot = telegram.Bot(token=telegramToken)
@@ -86,7 +86,6 @@ dqt = DeepQTrading(
     begin=datetime.datetime(2010,1,1,0,0,0,0),
     end=datetime.datetime(2019,2,22,0,0,0,0),
     nbActions=nb_actions,
-    nOutput=5,
     telegramToken=telegramToken,
     telegramChatID=telegramChatID
     )
