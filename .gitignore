@@ -2,6 +2,8 @@
 __pycache__/
 .vscode/
 
+# Don't track this files #
+/telegramSettings.py
 
 # Compiled source #
 ###################
@@ -32,5 +34,4 @@ __pycache__/
 *.tar
 *.zip
 
-# Don't track this files #
-telegramSettings.py
+
