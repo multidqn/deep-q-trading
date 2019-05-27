@@ -3,12 +3,16 @@ import pandas as pd
 
 long = [[],[]]
 short = [[],[]]
-long[0]= pd.read_csv("./spLong.csv").ix[:,"Date"].tolist()
-long[1]= pd.read_csv("./spLong.csv").ix[:,"ensemble"].tolist()
-short[0] = pd.read_csv("./spShort.csv").ix[:,"Date"].tolist()
-short[1] = pd.read_csv("./spShort.csv").ix[:,"ensemble"].tolist()
 
-output = open("finalEnsembleSP500.csv", "w+")
+longs=pd.read_csv("./Output/results/spLong.csv")
+shorts=pd.read_csv("./Output/results/spShort.csv")
+
+long[0]= longs.ix[:,"Date"].tolist()
+long[1]= longs.ix[:,"ensemble"].tolist()
+short[0] = shorts.ix[:,"Date"].tolist()
+short[1] = shorts.ix[:,"ensemble"].tolist()
+
+output = open("finalEnsembleSP500NEW.csv", "w+")
 output.write("date,ensemble\n")
 
 for i in range(0,len(long[0])):

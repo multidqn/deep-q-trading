@@ -127,64 +127,58 @@ class DeepQTrading:
         self.trainer=ValidationCallback()
         self.validator=ValidationCallback()
         self.tester=ValidationCallback()
-        
-        #Initiate the output file
-        self.outputFile=[]
-        
-        #Write in the file
-        for i in range(0,nOutput):
-            
-          
-            self.outputFile.append(open(outputFile+str(i+1)+".csv", "w+"))
 
-            #Write the fields in the file
-            self.outputFile[i].write(
-            "Iteration,"+
-            "trainAccuracy,"+
-            "trainCoverage,"+
-            "trainReward,"+
-            "trainLong%,"+
-            "trainShort%,"+
-            "trainLongAcc,"+
-            "trainShortAcc,"+
-            "trainLongPrec,"+
-            "trainShortPrec,"+
-
-            "validationAccuracy,"+
-            "validationCoverage,"+
-            "validationReward,"+
-            "validationLong%,"+
-            "validationShort%,"+
-            "validationLongAcc,"+
-            "validationShortAcc,"+
-            "validLongPrec,"+
-            "validShortPrec,"+
-            
-            "testAccuracy,"+
-            "testCoverage,"+
-            "testReward,"+
-            "testLong%,"+
-            "testShort%,"+
-            "testLongAcc,"+
-            "testShortAcc,"+
-            "testLongPrec,"+
-            "testShortPrec\n")
-        
 
     def run(self):
-
+        
         #Initiate the training, 
         trainEnv=validEnv=testEnv=" "
-
+        
         iteration=-1
 
         #While we did not pass through all the dates (i.e., while all the walks were not finished)
         #walk size is train+validation+test size
         #currentStarting point begins with begin date
         while(self.currentStartingPoint+self.walkSize <= self.endingPoint):
-
+            
             #Iteration is a walks
             iteration+=1
+
+            #Initiate the output file
+            self.outputFile=open(outputFile+str(iteration+1)+".csv", "w+")
+            #write the first row of the csv
+            self.outputFile.write(
+                "Iteration,"+
+                "trainAccuracy,"+
+                "trainCoverage,"+
+                "trainReward,"+
+                "trainLong%,"+
+                "trainShort%,"+
+                "trainLongAcc,"+
+                "trainShortAcc,"+
+                "trainLongPrec,"+
+                "trainShortPrec,"+
+
+                "validationAccuracy,"+
+                "validationCoverage,"+
+                "validationReward,"+
+                "validationLong%,"+
+                "validationShort%,"+
+                "validationLongAcc,"+
+                "validationShortAcc,"+
+                "validLongPrec,"+
+                "validShortPrec,"+
+                
+                "testAccuracy,"+
+                "testCoverage,"+
+                "testReward,"+
+                "testLong%,"+
+                "testShort%,"+
+                "testLongAcc,"+
+                "testShortAcc,"+
+                "testLongPrec,"+
+                "testShortPrec\n")
+
 
             #Send to the receiver the current walk
             if(self.telegramOutput):
@@ -262,7 +256,6 @@ class DeepQTrading:
             ensambleValid.index.name='Date'
             ensambleTest.index.name='Date'
             
-           
             #Explorations are epochs, 
             for eps in self.explorations:
 
@@ -315,7 +308,7 @@ class DeepQTrading:
                     print(" ")
                     
                     #write the walk data on the text file
-                    self.outputFile[iteration].write(
+                    self.outputFile.write(
                         str(i)+","+
                         str(trainAccuracy)+","+
                         str(trainCoverage)+","+
@@ -348,7 +341,7 @@ class DeepQTrading:
                         str(testShortPrec)+"\n")
 
             #Close the file                
-            self.outputFile[iteration].close()
+            self.outputFile.close()
 
             #For the next walk, the current starting point will be the current starting point + the test size
             #It means that, for the next walk, the training data will start 6 months after the training data of 
