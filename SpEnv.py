@@ -1,5 +1,4 @@
 #Environment used for spenv 
-
 #gym is the library of videogames used by reinforcement learning
 import gym
 from gym import spaces
@@ -19,10 +18,11 @@ MK = "sp500"
 
 
 class SpEnv(gym.Env):
-    #Just for the gym library. In a continuous environment, you can do infinite decisions. WE dont want this.
+    #Just for the gym library. In a continuous environment, you can do infinite decisions. 
+    #We dont want this because we have just three possible actions.
     continuous = False
 
-    #observation window are the time window regardin the "hour" dataset 
+    #Observation window is the time window regarding the "hourly" dataset 
     #ensemble variable tells to save or not the decisions at each walk
     def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, ensamble = None, callback = None, columnName = "iteration-1"):
         #Declare the episode as the first episode
@@ -30,7 +30,7 @@ class SpEnv(gym.Env):
         
         #Open the time series as the hourly dataset of S&P500
         #the input feature vector is composed of data from hours, weeks and days
-        #20 from days, 8 from weeks and 40 hours
+        #20 from days, 8 from weeks and 40 hours, ending with 68 dimensional feature vectors
         spTimeserie = pandas.read_csv('./dataset/'+MK+'Hour.csv')[minLimit:maxLimit] # opening the dataset
         
         #Converts each column to a list
@@ -42,7 +42,8 @@ class SpEnv(gym.Env):
         Close = spTimeserie.ix[:, 'Close'].tolist()
         
         #Open the weekly and daily data as a merged data structure
-        #Get the 20 dimensional vectors (close -open) and 8 dimensional vectors (close -open) from day and week
+        #Get 20 dimensional vectors (close-open) considering 20 past days and 8 dimensional vectors (close-open) 
+        #considering 8 weeks
         self.weekData = MergedDataStructure(delta=8,filename="./dataset/"+MK+"Week.csv")# this DS allows me to obtain previous historical data with different resolution
         self.dayData = MergedDataStructure(delta=20,filename="./dataset/"+MK+"Day.csv")#  with low computational complexity
         
@@ -57,6 +58,7 @@ class SpEnv(gym.Env):
             self.columnName = columnName
             #self.ensemble is a big table (before file writing) containing observations as lines and epochs as columns
             #each column will contain a decision for each epoch at each date. It is saved later.
+            #We read this table later in order to make ensemble decisions at each epoch
             self.ensamble[self.columnName]=0
 
         #Declare low and high as vectors with -inf values 
@@ -64,12 +66,12 @@ class SpEnv(gym.Env):
         self.high = numpy.array([+numpy.inf])
 
         #Define the space of actions as 3
-        # the action space is just 0,1,2 which means hold,long,short
+        #the action space is just 0,1,2 which means hold,long,short
         self.action_space = spaces.Discrete(3) 
         
         #low and high are the minimun and maximum accepted values for this problem
         #Tonio used random values
-        #We dont know what are the minimum values of Close-Open, so we put these values
+        #We dont know what are the minimum and maximum values of Close-Open, so we put these values
         self.observation_space = spaces.Box(self.low, self.high, dtype=numpy.float32)
 
         #The history begins empty
@@ -104,8 +106,7 @@ class SpEnv(gym.Env):
         self.callback=callback
 
     #This is the action that is done in the environment. 
-    #Receives the action and returns the state, the reward and if the 
- 
+    #Receives the action and returns the state, the reward and if its done 
     def step(self, action):
         #Initiates the reward, weeklist and daylist
         self.reward=0
@@ -167,7 +168,7 @@ class SpEnv(gym.Env):
         #print(str(action) + " " + str(self.reward))
         #reward=self.reward*20 if(self.reward<0) else self.reward
 
-        #File of the ensamble (file containing each epoch decisions in each walk) will contain the action for that 
+        #File of the ensamble (file containing each epoch decisions at each walk) will contain the action for that 
         #day (observation, line) at each epoch (column)
         if(self.output):
             self.ensamble.at[self.history[self.currentObservation]['Date'],self.columnName]=action
@@ -214,7 +215,7 @@ class SpEnv(gym.Env):
         self.currentObservation+=self.nextObservation
         self.currentObservation%=self.limit
 
-        #
+        #Get the hourly data
         if(self.currentObservation<self.observationWindow):
             self.currentObservation=self.observationWindow
             self.reset()
