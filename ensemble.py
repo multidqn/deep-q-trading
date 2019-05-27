@@ -140,4 +140,4 @@ def evaluate(csvname=""):
 
 
 
-evaluate(".\Output\results\finalEnsembleSP500.csv")
+#evaluate(".\Output\results\finalEnsembleSP500.csv")

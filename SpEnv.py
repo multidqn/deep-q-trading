@@ -156,7 +156,10 @@ class SpEnv(gym.Env):
         self.done=True
         #Call the callback for the episode
         if(self.callback!=None and self.done):
-            self.callback.on_episode_end(action,self.reward,self.possibleGain)
+            #Switch the commented line for correct output
+            self.callback.on_episode_end(action,self.reward,self.possibleGain) #Full trading
+            #self.callback.on_episode_end(0 if (action==0) else 2,self.reward,self.possibleGain) #Only Short
+            #self.callback.on_episode_end(0 if (action==0) else 1,self.reward,self.possibleGain) #Only Long
         
         #The state is prepared by the environment, which is simply the feature vector
         state = numpy.array([closeMinusOpen])

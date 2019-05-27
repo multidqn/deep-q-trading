@@ -322,7 +322,44 @@ pdf.savefig()
 ###########--------------------------------------------------------------------------------------------------------------------
 
 
+###########-------------------------------------------------------------------|Tabella Ensemble|-------------------
+x=2
+y=1
+plt.figure(figsize=(x*5,y*5))
+
+
+#for i in range(1,floor(x*y/2)+1):
+plt.subplot(y,x,i)
+plt.axis('off')
+
+val,col=ensemble(numFiles,0.6,"valid",0)
+
+
+t=plt.table(cellText=val, colLabels=col, fontsize=30, loc='center')
+t.auto_set_font_size(False)
+t.set_fontsize(6)
+plt.title("Valid")
 
 
 
+
+plt.subplot(y,x,i+1)
+plt.axis('off')
+
+val,col=ensemble(numFiles,0.6,"test",0)
+
+
+t=plt.table(cellText=val, colLabels=col, fontsize=30, loc='center')
+t.auto_set_font_size(False)
+t.set_fontsize(6)
+plt.title("Test")
+
+
+plt.suptitle('60% ENSEMBLE')
+pdf.savefig()
+
+
+###########--------------------------------------------------------------------------------------------------------------------
+
+pdf.close()
 pdf.close()

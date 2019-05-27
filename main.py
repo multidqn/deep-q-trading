@@ -103,7 +103,10 @@ except:
     bot.send_message(chat_id=telegramChatID, text="Experiment ended with errors -- "+str(datetime.datetime.now()))
     bot.send_message(chat_id=telegramChatID, text="Exception: " + str(sys.exc_info()[0]))
 
-#Then, it will send to the destination how long the experiment took
-#try:
-bot.send_message(chat_id=telegramChatID, text="The experiment took "+str(datetime.datetime.now() - startingTime))
 dqt.end()
+#Then, it will send to the destination how long the experiment took
+try:
+    bot.send_message(chat_id=telegramChatID, text="The experiment took "+str(datetime.datetime.now() - startingTime))
+except:
+    print('No connection')
+

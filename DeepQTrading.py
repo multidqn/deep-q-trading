@@ -61,9 +61,9 @@ class DeepQTrading:
             except:
                 print("Error with Telegram Bot")
         
-        #If they are not empty, prepare the bot to send messages
+        #If they are empty, set the telegram bot flag to false
         else:
-            self.telegramOutput=True
+            self.telegramOutput=False
 
         #Define the policy, explorations, actions and model as received by parameters
         self.policy = EpsGreedyQPolicy()
