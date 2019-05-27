@@ -1,4 +1,4 @@
-#Callbacks are functions used to give a feedback about each episode calculated metrics
+#Callbacks are functions used to give a feedback about each epoch calculated metrics
 from rl.callbacks import Callback
 
 class ValidationCallback(Callback):
@@ -19,7 +19,7 @@ class ValidationCallback(Callback):
         self.marketFall =0
 
     def reset(self):
-        #The metrics are also zero when the iteration ends
+        #The metrics are also zero when the epoch ends
         self.episodes = 0
         self.rewardSum = 0
         self.accuracy = 0
@@ -34,7 +34,7 @@ class ValidationCallback(Callback):
         self.marketFall =0
         
     #all information is given by the environment: action, reward and market
-    #Then, when the episode end, metrics are calculated
+    #Then, when the episode ends, metrics are calculated
     def on_episode_end(self, action, reward, market):
         
         #After the episode ends, increments the episodes 
@@ -43,26 +43,26 @@ class ValidationCallback(Callback):
         #Increments the reward
         self.rewardSum+=reward
 
-        #If the action is not a hold, there is coverage 
+        #If the action is not a hold, there is coverage because the agent decided 
         self.coverage+=1 if (action != 0) else 0
 
         #increments the accuracy if the reward is positive (we have a hit)
         self.accuracy+=1 if (reward >= 0 and action != 0) else 0
         
-        #Increments the counter for short if the action is short (id 2)
+        #Increments the counter for short if the action is a short (id 2)
         self.short +=1 if(action == 2) else 0
         
-        #Increments the counter for long if the action is long (id 1)
+        #Increments the counter for long if the action is a long (id 1)
         self.long +=1 if(action == 1) else 0
         
-        #We will also calculate the accuracy for a given action. Here, increments
+        #We will also calculate the accuracy for a given action. Here, it increments
         #the accuracy for short if the action is short and the reward is positive
         self.shortAcc +=1 if(action == 2 and reward >=0) else 0
         
         #Increments the accuracy for long if the action is long and the reward is positive
         self.longAcc +=1 if(action == 1 and reward >=0) else 0
         
-        #If market increases, increments the marketRise. If the prediction is 1 (long), increments the precision for long
+        #If the market increases, increments the marketRise variable. If the prediction is 1 (long), increments the precision for long
         if(market>0):
             self.marketRise+=1
             self.longPrec+=1 if(action == 1) else 0
@@ -84,12 +84,12 @@ class ValidationCallback(Callback):
         longPrec = 0
         shortPrec = 0
         
-        #If there is coverage, we will calculate the accuracy only related to when there were decisions. 
+        #If there is coverage, we will calculate the accuracy only related to when decisions were made. 
         #In other words, we dont calculate accuracy for hold operations
         if self.coverage > 0:
             acc = self.accuracy/self.coverage
         
-        #Now, we calculate the mean coverage, short and long operations of the episodes
+        #Now, we calculate the mean coverage, short and long operations from the episodes
         if self.episodes > 0:
             cov = self.coverage/self.episodes
             short = self.short/self.episodes
