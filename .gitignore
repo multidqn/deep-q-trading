@@ -31,3 +31,6 @@ __pycache__/
 *.rar
 *.tar
 *.zip
+
+# Don't track this files #
+telegramSettings.py
