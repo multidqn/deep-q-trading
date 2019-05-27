@@ -26,7 +26,7 @@ class SpEnv(gym.Env):
     #ensemble variable tells to save or not the decisions at each walk
     def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, ensamble = None, callback = None, columnName = "iteration-1"):
         #Declare the episode as the first episode
-        self.episodio=1
+        self.episode=1
         
         #Open the time series as the hourly dataset of S&P500
         #the input feature vector is composed of data from hours, weeks and days
@@ -110,25 +110,8 @@ class SpEnv(gym.Env):
     def step(self, action):
         #Initiates the reward, weeklist and daylist
         self.reward=0
-        weekList = []
-        dayList = []
-
-        #Get the dayly information and week information
-        #get all the data
-        dayList=self.dayData.get(self.history[self.currmarketRiseentObservation]['Date'])
-        weekList=self.weekData.get(self.history[self.cumarketRiserrentObservation]['Date'])
-        #marketRise
-        #Get the previous 40 hours regarding each date
-        currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
-
-        #The data is finally concatenated here. We concatenate Hours, days and weeks information
-        currentData=currentData + dayList + weekList
-
-        #Calculates the close minus open 
-        #The percentage of growing or decreasing is calculated as CloseMinusOpen
-        #This is the input vector
-        closeMinusOpen=list(map(lambda x: (x["Close"]-x["Open"])/x["Open"],currentData))
         
+
         #set the next observation to zero
         self.nextObservation=0
         #Search for the close value for tommorow
@@ -142,7 +125,6 @@ class SpEnv(gym.Env):
 
         #Calculate the reward in percentage of growing/decreasing
         self.possibleGain = (self.closeValue - self.openValue)/self.openValue
-        
         #If action is a long, calculate the reward 
         if(action == 1):
             #The reward must be subtracted by the cost of transaction
@@ -155,6 +137,8 @@ class SpEnv(gym.Env):
             self.reward = 0
         #Finish episode 
         self.done=True
+
+
         #Call the callback for the episode
         if(self.callback!=None and self.done):
             #Switch the commented line for correct output
@@ -162,76 +146,76 @@ class SpEnv(gym.Env):
             #self.callback.on_episode_end(0 if (action==0) else 2,self.reward,self.possibleGain) #Only Short
             #self.callback.on_episode_end(0 if (action==0) else 1,self.reward,self.possibleGain) #Only Long
         
-        #The state is prepared by the environment, which is simply the feature vector
-        state = numpy.array([closeMinusOpen])
-        #state = numpy.array([closeMinusOpen,high,low,volume])
-        #print(str(action) + " " + str(self.reward))
-        #reward=self.reward*20 if(self.reward<0) else self.reward
 
         #File of the ensamble (file containing each epoch decisions at each walk) will contain the action for that 
         #day (observation, line) at each epoch (column)
         if(self.output):
             self.ensamble.at[self.history[self.currentObservation]['Date'],self.columnName]=action
         
+        
+        
         #Return the state, reward and if its done or not
-        return state, self.reward, self.done, {}
+        return self.getObservation(self.history[self.currentObservation]['Date']), self.reward, self.done, {}
         
     #function done when the episode finishes
     #reset will prepare the next state (feature vector) and give it to the agent
     def reset(self):
 
-        self.done = False
-        self.episodio+=1
-        self.nextObservation=0
+        if(self.currentObservation<self.observationWindow):
+            self.currentObservation=self.observationWindow
+
+
+        
+        self.episode+=1
+        
         
         #Shiftting the index for the first hour of the next day
+        self.nextObservation=0
         while(self.history[self.currentObservation]['Date']==self.history[(self.currentObservation+self.nextObservation)%self.limit]['Date']):
             self.nextObservation+=1
             #check if the index exceeds the limits
             if((self.currentObservation+self.nextObservation)>=self.limit):
-                print("Balordo: episodio " + str(self.episodio) )
+                print("Resetted: episode " + str(self.episode) + " over the limit" )
             
         #reset the values used in the step() function
+        self.done = False
         self.reward = None
         self.possibleGain = 0
         self.openValue = 0
         self.closeValue = 0
 
-        #Daylist and Weeklist are empty
-        dayList = []
-        weekList = []
-        
-        #get the same data when reset
-        dayList=self.dayData.get(self.history[self.currentObservation]['Date'])
-        weekList=self.weekData.get(self.history[self.currentObservation]['Date'])
-        
-        #Do everything again, giving to the agent the next date data 
-        currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
-        
-        #concatenate the data
-        currentData=currentData + dayList + weekList
-
         #Prepapre to get the next observation
         self.currentObservation+=self.nextObservation
         self.currentObservation%=self.limit
 
-        #Get the hourly data
-        if(self.currentObservation<self.observationWindow):
-            self.currentObservation=self.observationWindow
-            self.reset()
-        self.nextObservation=0
+        return self.getObservation(self.history[self.currentObservation]['Date'])
+
+
+    def getObservation(self, date):
+        weekList = []
+        dayList = []
+
+        #Get the dayly information and week information
+        #get all the data
+        dayList=self.dayData.get(date)
+        weekList=self.weekData.get(date)
+
+        #Get the previous 40 hours regarding each date
+        currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
+
+        #The data is finally concatenated here. We concatenate Hours, days and weeks information
+        currentData=currentData + dayList + weekList
+
+        #Calculates the close minus open 
+        #The percentage of growing or decreasing is calculated as CloseMinusOpen
+        #This is the input vector
         closeMinusOpen=list(map(lambda x: (x["Close"]-x["Open"])/x["Open"],currentData))
-
-        #high=list(map(lambda x: x["High"],currentData))
-        #low=list(map(lambda x: x["Low"],currentData))
-        #volume=list(map(lambda x: x["Volume"],currentData))
-
-        #State is the feature vector composed of close - open for dates, weeks and hours concatenated
-        state = numpy.array([closeMinusOpen])
-        #state = numpy.array([closeMinusOpen,high,low,volume])
-        return state
-
+        
+        
+        #The state is prepared by the environment, which is simply the feature vector
+        return  numpy.array([closeMinusOpen])
+    
     def resetEnv(self):
         self.currentObservation=self.observationWindow
         #Resets the episode to 1
-        self.episodio=1
+        self.episode=1

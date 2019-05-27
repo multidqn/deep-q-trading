@@ -3,7 +3,8 @@ __pycache__/
 .vscode/
 
 # Don't track this files #
-/telegramSettings.py
+telegramSettings.py
+
 
 # Compiled source #
 ###################
