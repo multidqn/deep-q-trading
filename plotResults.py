@@ -10,17 +10,17 @@ from ensemble import ensemble
 # python plotResults.py results 2 
 numPlots=11
 outputFile=str(sys.argv[1])+".pdf"
-
+numEpochs=100
 pdf=PdfPages(outputFile)
 numFiles=int(sys.argv[2])
-plt.figure(figsize=(5*(numFiles+1),numPlots*5)) 
+plt.figure(figsize=((numEpochs/10)*(numFiles+1),numPlots*5)) 
 for i in range(1,numFiles+1):
     document = pd.read_csv("./Output/csv/walks/walks"+str(i)+".csv")
     plt.subplot(numPlots,numFiles,0*numFiles + i )
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testAccuracy'].tolist(),'r',label='Test')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'trainAccuracy'].tolist(),'b',label='Train')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationAccuracy'].tolist(),'g',label='Validation')
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
@@ -32,7 +32,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testCoverage'].tolist(),'r',label='Test')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'trainCoverage'].tolist(),'b',label='Train')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationCoverage'].tolist(),'g',label='Validation')
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
@@ -47,7 +47,7 @@ for i in range(1,numFiles+1):
     #plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationReward'].tolist(),'g',label='Validation')
     #plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testReward'].tolist(),'r',label='Test')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
@@ -60,7 +60,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationReward'].tolist(),'g',label='Validation')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testReward'].tolist(),'r',label='Test')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     plt.axhline(y=0, color='k', linestyle='-')
     plt.legend()
     plt.grid()
@@ -73,7 +73,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testLong%'].tolist(),'g',label='Validation')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationLong%'].tolist(),'r',label='Test')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     plt.yticks(np.arange(0, 1, step=0.1))    
     plt.ylim(-0.05,1.05)
     plt.axhline(y=0, color='k', linestyle='-')
@@ -88,7 +88,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testShort%'].tolist(),'g',label='Validation')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationShort%'].tolist(),'r',label='Test')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
 
     plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
@@ -104,7 +104,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),list(map(lambda x: 1-x,document.ix[:, 'trainCoverage'].tolist())),'b',label='Train')
     plt.plot(document.ix[:, 'Iteration'].tolist(),list(map(lambda x: 1-x,document.ix[:, 'validationCoverage'].tolist())),'g',label='Validation')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     
     plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
@@ -120,7 +120,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testLongAcc'].tolist(),'g',label='Validation')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationLongAcc'].tolist(),'r',label='Test')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     
     plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
@@ -137,7 +137,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testShortAcc'].tolist(),'g',label='Validation')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validationShortAcc'].tolist(),'r',label='Test')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     
     plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
@@ -154,7 +154,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testLongPrec'].tolist(),'g',label='Validation')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validLongPrec'].tolist(),'r',label='Test')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     
     plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
@@ -171,7 +171,7 @@ for i in range(1,numFiles+1):
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'testShortPrec'].tolist(),'g',label='Validation')
     plt.plot(document.ix[:, 'Iteration'].tolist(),document.ix[:, 'validShortPrec'].tolist(),'r',label='Test')
     
-    plt.xticks(range(0,50,4))
+    plt.xticks(range(0,numEpochs,4))
     
     plt.yticks(np.arange(0, 1, step=0.1))
     plt.ylim(-0.05,1.05)
