@@ -125,8 +125,9 @@ class DeepQTrading:
         self.trainer=ValidationCallback()
         self.validator=ValidationCallback()
         self.tester=ValidationCallback()
-
-
+    
+    def run(self):
+    
         #Initiates the environments, 
         trainEnv=validEnv=testEnv=" "
         
