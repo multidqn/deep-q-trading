@@ -49,7 +49,7 @@ bot.send_message(chat_id=telegramChatID, text="Experiment started "+str(datetime
 #So, the action performed in this case is buying at the beginning of the day and sell it at the end of the day (aka long).
 #Short(id 2): It predicts that the stock market value will decrease at the end of the day.
 #So, the action that must be done is selling at the beginning of the day and buy it at the end of the day (aka short). 
-nb_actions = 2
+nb_actions = 3
 
 #This is a simple NN considered. It is composed of:
 #One flatten layer to get 68 dimensional vectors as input
