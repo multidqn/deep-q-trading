@@ -1,7 +1,7 @@
 #os library is used to define the GPU to be used by the code, needed only in cerain situations (Better not to use it, use only if the main gpu is Busy)
 import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
-os.environ["CUDA_VISIBLE_DEVICES"]="0";
+os.environ["CUDA_VISIBLE_DEVICES"]="1";
 
 #This is the class call for the Agent which will perform the experiment
 from DeepQTrading import DeepQTrading
@@ -83,8 +83,8 @@ dqt = DeepQTrading(
     validationSize=datetime.timedelta(days=30*6),
     testSize=datetime.timedelta(days=30*6),
     outputFile="./Output/csv/walks/walks",
-    begin=datetime.datetime(2010,1,1,0,0,0,0),
-    end=datetime.datetime(2019,2,22,0,0,0,0),
+    begin=datetime.datetime(2004,1,1,0,0,0,0),
+    end=datetime.datetime(2019,2,28,0,0,0,0),
     nbActions=nb_actions,
     telegramToken=telegramToken,
     telegramChatID=telegramChatID
