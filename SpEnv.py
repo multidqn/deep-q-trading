@@ -105,12 +105,17 @@ class SpEnv(gym.Env):
         self.closeValue = 0
         self.callback=callback
 
+
     #This is the action that is done in the environment. 
     #Receives the action and returns the state, the reward and if its done 
     def step(self, action):
         #Initiates the reward, weeklist and daylist
         self.reward=0
         
+
+        ##UNCOMMENT NEXT LINE FOR ONLY SHORT AGENT
+        #action= 2 if (action == 1) else 0
+
 
         #set the next observation to zero
         self.nextObservation=0
@@ -141,10 +146,7 @@ class SpEnv(gym.Env):
 
         #Call the callback for the episode
         if(self.callback!=None and self.done):
-            #Switch the commented line for correct output
-            self.callback.on_episode_end(action,self.reward,self.possibleGain) #Full trading
-            #self.callback.on_episode_end(0 if (action==0) else 2,self.reward,self.possibleGain) #Only Short
-            #self.callback.on_episode_end(0 if (action==0) else 1,self.reward,self.possibleGain) #Only Long
+            self.callback.on_episode_end(action,self.reward,self.possibleGain)
         
 
         #File of the ensamble (file containing each epoch decisions at each walk) will contain the action for that 
@@ -175,7 +177,7 @@ class SpEnv(gym.Env):
             self.nextObservation+=1
             #check if the index exceeds the limits
             if((self.currentObservation+self.nextObservation)>=self.limit):
-                print("Resetted: episode " + str(self.episode) + " over the limit" )
+                print("Resetted: episode " + str(self.episode) +"; Index " + str(self.currentObservation+self.nextObservation) + " over the limit (" + str(self.limit) + ")" )
             
         #reset the values used in the step() function
         self.done = False
@@ -186,34 +188,39 @@ class SpEnv(gym.Env):
 
         #Prepapre to get the next observation
         self.currentObservation+=self.nextObservation
-        self.currentObservation%=self.limit
-
+        if(self.currentObservation>=self.limit):
+            self.currentObservation=self.observationWindow
+        
         return self.getObservation(self.history[self.currentObservation]['Date'])
 
 
     def getObservation(self, date):
-        weekList = []
-        dayList = []
 
         #Get the dayly information and week information
         #get all the data
-        dayList=self.dayData.get(date)
-        weekList=self.weekData.get(date)
+        # dayList=self.dayData.get(date)
+        # weekList=self.weekData.get(date)
 
         #Get the previous 40 hours regarding each date
-        currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
+        # currentData = self.history[self.currentObservation-self.observationWindow:self.currentObservation] 
 
         #The data is finally concatenated here. We concatenate Hours, days and weeks information
-        currentData=currentData + dayList + weekList
+        # currentData=self.history[self.currentObservation-self.observationWindow:self.currentObservation]  + self.dayData.get(date) + self.weekData.get(date)
 
         #Calculates the close minus open 
         #The percentage of growing or decreasing is calculated as CloseMinusOpen
         #This is the input vector
-        closeMinusOpen=list(map(lambda x: (x["Close"]-x["Open"])/x["Open"],currentData))
+        # closeMinusOpen=list(map(lambda x: (x["Close"]-x["Open"])/x["Open"],self.history[self.currentObservation-self.observationWindow:self.currentObservation]  + self.dayData.get(date) + self.weekData.get(date)))
         
         
         #The state is prepared by the environment, which is simply the feature vector
-        return  numpy.array([closeMinusOpen])
+        return  numpy.array(
+            [list(
+                map(
+                    lambda x: (x["Close"]-x["Open"])/x["Open"],
+                        self.history[self.currentObservation-self.observationWindow:self.currentObservation]  + 
+                        self.dayData.get(date) + 
+                        self.weekData.get(date)))])
     
     def resetEnv(self):
         self.currentObservation=self.observationWindow

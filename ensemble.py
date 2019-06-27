@@ -48,7 +48,7 @@ def ensemble(numWalks,perc,type,numDel):
     dax=pd.read_csv("./dataset/sp500Day.csv",index_col='Date')
     for j in range(0,numWalks):
 
-        df=pd.read_csv("./Output/ensamble/walk"+str(j)+"ensamble_"+type+".csv",index_col='Date')
+        df=pd.read_csv("./Output/ensemble/walk"+str(j)+"ensemble_"+type+".csv",index_col='Date')
 
 
 

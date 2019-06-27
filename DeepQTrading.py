@@ -125,8 +125,9 @@ class DeepQTrading:
         self.trainer=ValidationCallback()
         self.validator=ValidationCallback()
         self.tester=ValidationCallback()
+        self.outputFileName=outputFile
 
-
+    def run(self):
         #Initiates the environments, 
         trainEnv=validEnv=testEnv=" "
         
@@ -141,7 +142,7 @@ class DeepQTrading:
             iteration+=1
 
             #Initiate the output file
-            self.outputFile=open(outputFile+str(iteration+1)+".csv", "w+")
+            self.outputFile=open(self.outputFileName+str(iteration+1)+".csv", "w+")
             #write the first row of the csv
             self.outputFile.write(
                 "Iteration,"+

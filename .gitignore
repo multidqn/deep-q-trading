@@ -1,6 +1,6 @@
 # Don't track content of these folders
-__pycache__/
-.vscode/
+Output/
+
 
 # Don't track this files #
 telegramSettings.py
