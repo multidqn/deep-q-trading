@@ -14,7 +14,7 @@ from MergedDataStructure import MergedDataStructure
 import Callback
 
 #This is the prefix of the files that will be opened. It is related to the s&p500 stock market datasets
-MK = "sp500"
+MK = "dax"
 
 
 class SpEnv(gym.Env):
@@ -114,7 +114,7 @@ class SpEnv(gym.Env):
         
 
         ##UNCOMMENT NEXT LINE FOR ONLY SHORT AGENT
-        #action= 2 if (action == 1) else 0
+        action= 2 if (action == 1) else 0
 
 
         #set the next observation to zero

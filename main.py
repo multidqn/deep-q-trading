@@ -49,7 +49,7 @@ bot.send_message(chat_id=telegramChatID, text="Experiment started "+str(datetime
 #So, the action performed in this case is buying at the beginning of the day and sell it at the end of the day (aka long).
 #Short(id 2): It predicts that the stock market value will decrease at the end of the day.
 #So, the action that must be done is selling at the beginning of the day and buy it at the end of the day (aka short). 
-nb_actions = 3
+nb_actions = 2
 
 #This is a simple NN considered. It is composed of:
 #One flatten layer to get 68 dimensional vectors as input
@@ -83,7 +83,7 @@ dqt = DeepQTrading(
     validationSize=datetime.timedelta(days=30*6),
     testSize=datetime.timedelta(days=30*6),
     outputFile="./Output/csv/walks/walks",
-    begin=datetime.datetime(2004,1,1,0,0,0,0),
+    begin=datetime.datetime(2001,1,1,0,0,0,0),
     end=datetime.datetime(2019,2,28,0,0,0,0),
     nbActions=nb_actions,
     telegramToken=telegramToken,

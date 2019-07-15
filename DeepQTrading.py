@@ -30,7 +30,7 @@ import datetime
 import telegram
 
 #Prefix of the name of the market (S&P500) files used to load the data
-MK="sp500"
+MK="dax"
 
 class DeepQTrading:
     
