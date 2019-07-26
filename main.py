@@ -1,7 +1,7 @@
 #os library is used to define the GPU to be used by the code, needed only in cerain situations (Better not to use it, use only if the main gpu is Busy)
 import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
-os.environ["CUDA_VISIBLE_DEVICES"]="1";
+os.environ["CUDA_VISIBLE_DEVICES"]="0";
 
 #This is the class call for the Agent which will perform the experiment
 from DeepQTrading import DeepQTrading
@@ -34,7 +34,11 @@ import sys
 
 from telegramSettings import telegramToken
 from telegramSettings import telegramChatID
-
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
+config = tf.ConfigProto()
+config.gpu_options.per_process_gpu_memory_fraction = 0.3
+set_session(tf.Session(config=config))
 
 #Declare Telegram bot to be used
 bot = telegram.Bot(token=telegramToken)
@@ -49,7 +53,9 @@ bot.send_message(chat_id=telegramChatID, text="Experiment started "+str(datetime
 #So, the action performed in this case is buying at the beginning of the day and sell it at the end of the day (aka long).
 #Short(id 2): It predicts that the stock market value will decrease at the end of the day.
 #So, the action that must be done is selling at the beginning of the day and buy it at the end of the day (aka short). 
-nb_actions = 2
+nb_actions = int(sys.argv[1])
+
+isOnlyShort=sys.argv[2]==1
 
 #This is a simple NN considered. It is composed of:
 #One flatten layer to get 68 dimensional vectors as input
@@ -86,6 +92,8 @@ dqt = DeepQTrading(
     begin=datetime.datetime(2001,1,1,0,0,0,0),
     end=datetime.datetime(2019,2,28,0,0,0,0),
     nbActions=nb_actions,
+    isOnlyShort=isOnlyShort,
+    ensembleFolderName=sys.argv[3],
     telegramToken=telegramToken,
     telegramChatID=telegramChatID
     )

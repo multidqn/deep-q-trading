@@ -24,9 +24,11 @@ class SpEnv(gym.Env):
 
     #Observation window is the time window regarding the "hourly" dataset 
     #ensemble variable tells to save or not the decisions at each walk
-    def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, ensamble = None, callback = None, columnName = "iteration-1"):
+    def __init__(self, minLimit=None, maxLimit=None, operationCost = 0, observationWindow = 40, ensamble = None, callback = None, isOnlyShort=False, columnName = "iteration-1"):
         #Declare the episode as the first episode
         self.episode=1
+
+        self.isOnlyShort=isOnlyShort
         
         #Open the time series as the hourly dataset of S&P500
         #the input feature vector is composed of data from hours, weeks and days
@@ -114,7 +116,8 @@ class SpEnv(gym.Env):
         
 
         ##UNCOMMENT NEXT LINE FOR ONLY SHORT AGENT
-        action= 2 if (action == 1) else 0
+        if(self.isOnlyShort):
+            action *= 2
 
 
         #set the next observation to zero

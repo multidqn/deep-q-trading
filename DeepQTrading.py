@@ -49,8 +49,11 @@ class DeepQTrading:
     #operationCost: Price for the transaction (we set they are free)
     #telegramToken: token used for the bot that will send messages
     #telegramChatID: ID of messager receiver in Telegram
-    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, operationCost=0,telegramToken="",telegramChatID=""):
+    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, isOnlyShort, ensembleFolderName, operationCost=0,telegramToken="",telegramChatID=""):
         
+        self.isOnlyShort=isOnlyShort
+        self.ensembleFolderName=ensembleFolderName
+
         #If the telegram token for the bot and the telegram id of the receiver are empty, try to send a message 
         #otherwise print error
         if(telegramToken!="" and telegramChatID!=""):
@@ -264,11 +267,11 @@ class DeepQTrading:
                     del(trainEnv)
 
                     #Define the training, validation and testing environments with their respective callbacks
-                    trainEnv = SpEnv(operationCost=self.operationCost,minLimit=trainMinLimit,maxLimit=trainMaxLimit,callback=self.trainer)
+                    trainEnv = SpEnv(operationCost=self.operationCost,minLimit=trainMinLimit,maxLimit=trainMaxLimit,callback=self.trainer,isOnlyShort=self.isOnlyShort)
                     del(validEnv)
-                    validEnv=SpEnv(operationCost=self.operationCost,minLimit=validMinLimit,maxLimit=validMaxLimit,callback=self.validator,ensamble=ensambleValid,columnName="iteration"+str(i))
+                    validEnv=SpEnv(operationCost=self.operationCost,minLimit=validMinLimit,maxLimit=validMaxLimit,callback=self.validator,isOnlyShort=self.isOnlyShort,ensamble=ensambleValid,columnName="iteration"+str(i))
                     del(testEnv)
-                    testEnv=SpEnv(operationCost=self.operationCost,minLimit=testMinLimit,maxLimit=testMaxLimit,callback=self.tester,ensamble=ensambleTest,columnName="iteration"+str(i))
+                    testEnv=SpEnv(operationCost=self.operationCost,minLimit=testMinLimit,maxLimit=testMaxLimit,callback=self.tester,isOnlyShort=self.isOnlyShort,ensamble=ensambleTest,columnName="iteration"+str(i))
 
                     #Reset the callback
                     self.trainer.reset()
@@ -346,8 +349,8 @@ class DeepQTrading:
 
             #Write validation and Testing data into files
             #Save the files for processing later with the ensemble considering the 100 epochs
-            ensambleValid.to_csv("./Output/ensemble/walk"+str(iteration)+"ensemble_valid.csv")
-            ensambleTest.to_csv("./Output/ensemble/walk"+str(iteration)+"ensemble_test.csv")
+            ensambleValid.to_csv("./Output/ensemble/"+self.ensembleFolderName+"/walk"+str(iteration)+"ensemble_valid.csv")
+            ensambleTest.to_csv("./Output/ensemble/"+self.ensembleFolderName+"/walk"+str(iteration)+"ensemble_test.csv")
 
     #Function to end the Agent
     def end(self):
