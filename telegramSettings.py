@@ -1,3 +1,3 @@
 #Data regarding the bot and destination used for messages
-telegramToken='PUT HERE YOUR TELEGRAM TOKEN'
-telegramChatID='PUT HERE YOUR TELEGRAM CHAT ID'
+telegramToken='864997856:AAFjYS9qw9Gd3L_AwYGBPdhE7w-SWxf-JjU'
+telegramChatID='@DeepQTrading'
