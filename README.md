@@ -42,9 +42,9 @@ The file **utils/plotResults.py** can be used to get a pdf containing many plots
 
 ## Usage
 The code needs 2 positional parameters to run:<br>
-`python main.py nummberOfActions isOnlyShort`<br>
+`python main.py numberOfActions isOnlyShort`<br>
 <br>
 
-* To run the FULL agent you need to run: `python main.py 3 0`
-* To run the ONLY LONG agent you need to run: `python main.py 2 0`
-* To run the ONLY SHORT agent you need to run: `python main.py 2 1`
+* To run the **FULL** agent you need to run: `python main.py 3 0`
+* To run the **ONLY LONG** agent you need to run: `python main.py 2 0`
+* To run the **ONLY SHORT** agent you need to run: `python main.py 2 1`
