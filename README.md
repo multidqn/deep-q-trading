@@ -47,4 +47,4 @@ The code needs 2 positional parameters to run:<br>
 
 * To run the FULL agent you need to run: `python main.py 3 0`
 * To run the ONLY LONG agent you need to run: `python main.py 2 0`
-* To run the ONLY SHORT agent you need to run: `python main.py 2 0`
+* To run the ONLY SHORT agent you need to run: `python main.py 2 1`
