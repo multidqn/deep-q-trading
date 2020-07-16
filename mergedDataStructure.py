@@ -1,3 +1,5 @@
+#Copyright (C) 2020 Salvatore Carta, Anselmo Ferreira, Alessandro Sebastian Podda, Diego Reforgiato Recupero, Antonio Sanna. All rights reserved.
+
 #Library used to manipulate the CSV Dataset
 #organize the dataset for the Enviroment
 import pandas
