@@ -1,8 +1,8 @@
 #Imports the SPEnv library, which will perform the Agent actions themselves
-from SpEnv import SpEnv
+from spEnv import SpEnv
 
 #Callback used to print the results at each episode
-from Callback import ValidationCallback
+from callback import ValidationCallback
 
 #Keras library for the NN considered
 from keras.models import Sequential

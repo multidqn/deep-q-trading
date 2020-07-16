@@ -11,7 +11,7 @@ from datetime import datetime
 #Library created by Tonio to merge data used as feature vectors
 from mergedDataStructure import MergedDataStructure
 #Callback is the library used to show metrics 
-import Callback
+import callback
 
 #This is the prefix of the files that will be opened. It is related to the s&p500 stock market datasets
 MK = "dax"

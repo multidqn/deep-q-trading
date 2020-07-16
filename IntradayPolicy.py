@@ -1,5 +1,5 @@
 from rl.policy import Policy
-import SpEnv
+import spEnv
 import numpy
 
 class IntradayPolicy(Policy):
