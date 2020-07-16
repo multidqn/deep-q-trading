@@ -1,3 +1,5 @@
+#Copyright (C) 2020 Salvatore Carta, Anselmo Ferreira, Alessandro Sebastian Podda, Diego Reforgiato Recupero, Antonio Sanna. All rights reserved.
+
 #os library is used to define the GPU to be used by the code, needed only in cerain situations (Better not to use it, use only if the main gpu is Busy)
 #import os
 #os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
