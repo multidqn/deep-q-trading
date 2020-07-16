@@ -1,3 +1,5 @@
+#Copyright (C) 2020 Salvatore Carta, Anselmo Ferreira, Alessandro Sebastian Podda, Diego Reforgiato Recupero, Antonio Sanna. All rights reserved.
+
 #Imports the SPEnv library, which will perform the Agent actions themselves
 from spEnv import SpEnv
 
