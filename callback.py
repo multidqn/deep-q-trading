@@ -1,3 +1,4 @@
+#Copyright (C) 2020 Salvatore Carta, Anselmo Ferreira, Alessandro Sebastian Podda, Diego Reforgiato Recupero, Antonio Sanna. All rights reserved.
 #Callbacks are functions used to give a feedback about each epoch calculated metrics
 from rl.callbacks import Callback
 
