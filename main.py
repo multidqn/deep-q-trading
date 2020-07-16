@@ -34,11 +34,11 @@ import sys
 
 from telegramSettings import telegramToken
 from telegramSettings import telegramChatID
-import tensorflow as tf
-from keras.backend.tensorflow_backend import set_session
-config = tf.ConfigProto()
-config.gpu_options.per_process_gpu_memory_fraction = 0.3
-set_session(tf.Session(config=config))
+#import tensorflow as tf
+#from keras.backend.tensorflow_backend import set_session
+#config = tf.ConfigProto()
+#config.gpu_options.per_process_gpu_memory_fraction = 0.3
+#set_session(tf.Session(config=config))
 
 #Declare Telegram bot to be used
 bot = telegram.Bot(token=telegramToken)
