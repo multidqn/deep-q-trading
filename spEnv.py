@@ -1,3 +1,5 @@
+#Copyright (C) 2020 Salvatore Carta, Anselmo Ferreira, Alessandro Sebastian Podda, Diego Reforgiato Recupero, Antonio Sanna. All rights reserved.
+
 #Environment used for spenv 
 #gym is the library of videogames used by reinforcement learning
 import gym
