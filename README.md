@@ -1,21 +1,4 @@
-# Multi-DQN: an Ensemble of Deep Q-Learning Agents for Stock Market Forecasting
-
-                                                                                                                  
-                                                                                                                  
-________                                      ____        __________                   ___                        
-`MMMMMMMb.                                   6MMMMb       MMMMMMMMMM                   `MM 68b                    
- MM    `Mb                                  8P    Y8      /   MM   \                    MM Y89                    
- MM     MM   ____     ____  __ ____        6M      Mb         MM ___  __    ___     ____MM ___ ___  __     __     
- MM     MM  6MMMMb   6MMMMb `M6MMMMb       MM      MM         MM `MM 6MM  6MMMMb   6MMMMMM `MM `MM 6MMb   6MMbMMM 
- MM     MM 6M'  `Mb 6M'  `Mb MM'  `Mb      MM      MM         MM  MM69 " 8M'  `Mb 6M'  `MM  MM  MMM9 `Mb 6M'`Mb   
- MM     MM MM    MM MM    MM MM    MM      MM      MM         MM  MM'        ,oMM MM    MM  MM  MM'   MM MM  MM   
- MM     MM MMMMMMMM MMMMMMMM MM    MM      MM      MM MMMMMMM MM  MM     ,6MM9'MM MM    MM  MM  MM    MM YM.,M9   
- MM     MM MM       MM       MM    MM      YM      M9         MM  MM     MM'   MM MM    MM  MM  MM    MM  YMM9    
- MM    .M9 YM    d9 YM    d9 MM.  ,M9       8b    d8          MM  MM     MM.  ,MM YM.  ,MM  MM  MM    MM (M       
-_MMMMMMM9'  YMMMM9   YMMMM9  MMYMMM9         YMMMM9          _MM__MM_    `YMMM9'Yb.YMMMMMM__MM__MM_  _MM_ YMMMMb. 
-                             MM                MM                                                        6M    Yb 
-                             MM                YM.                                                       YM.   d9 
-                            _MM_                `Mo                                                       YMMMM9  
+# Multi-DQN: an Ensemble of Deep Q-Learning Agents for Stock Market Forecasting                                                                                                            
 
 ## Abstract 
 
