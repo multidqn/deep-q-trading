@@ -1,7 +1,7 @@
 #os library is used to define the GPU to be used by the code, needed only in cerain situations (Better not to use it, use only if the main gpu is Busy)
-import os
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
-os.environ["CUDA_VISIBLE_DEVICES"]="0";
+#import os
+#os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID";
+#os.environ["CUDA_VISIBLE_DEVICES"]="0";
 
 #This is the class call for the Agent which will perform the experiment
 from DeepQTrading import DeepQTrading

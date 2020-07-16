@@ -45,7 +45,7 @@ def ensemble(numWalks,perc,type,numDel):
     #output=open("daxValidDel9th60.csv","w+")
     #output.write("Iteration,Reward%,#Wins,#Losses,Euro,Coverage,Accuracy\n")
     columns = ["Iteration","Reward%","#Wins","#Losses","Dollars","Coverage","Accuracy"]
-    dax=pd.read_csv("./dataset/sp500Day.csv",index_col='Date')
+    dax=pd.read_csv("./datasets/sp500Day.csv",index_col='Date')
     for j in range(0,numWalks):
 
         df=pd.read_csv("./Output/ensemble/walk"+str(j)+"ensemble_"+type+".csv",index_col='Date')
@@ -106,7 +106,7 @@ def evaluate(csvname=""):
     output=open("resultsSPFinal.csv","w+")
     output.write("Iteration,Reward%,#Wins,#Losses,Euro,Coverage,Accuracy\n")
     df=pd.read_csv(csvname)
-    dax=pd.read_csv("./dataset/sp500Day.csv",index_col='Date')
+    dax=pd.read_csv("./datasets/sp500Day.csv",index_col='Date')
     df['date'] = pd.to_datetime(df['date'])
     df['date'] = df['date'].dt.strftime('%m/%d/%Y')
     df.set_index('date', inplace=True)

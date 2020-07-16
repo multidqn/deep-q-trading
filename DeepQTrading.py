@@ -108,8 +108,8 @@ class DeepQTrading:
         #Read the hourly dataset
         #We join data from different files
         #Here hour data is read 
-        self.dates= pd.read_csv('./dataset/'+MK+'Hour.csv')
-        self.sp = pd.read_csv('./dataset/'+MK+'Hour.csv')
+        self.dates= pd.read_csv('./datasets/'+MK+'Hour.csv')
+        self.sp = pd.read_csv('./datasets/'+MK+'Hour.csv')
         #Convert the pandas format to date and time format
         self.sp['Datetime'] = pd.to_datetime(self.sp['Date'] + ' ' + self.sp['Time'])
         #Set an index to Datetime on the pandas loaded dataset. Registers will be indexes through these values

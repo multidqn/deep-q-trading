@@ -33,7 +33,7 @@ class SpEnv(gym.Env):
         #Open the time series as the hourly dataset of S&P500
         #the input feature vector is composed of data from hours, weeks and days
         #20 from days, 8 from weeks and 40 hours, ending with 68 dimensional feature vectors
-        spTimeserie = pandas.read_csv('./dataset/'+MK+'Hour.csv')[minLimit:maxLimit] # opening the dataset
+        spTimeserie = pandas.read_csv('./datasets/'+MK+'Hour.csv')[minLimit:maxLimit] # opening the dataset
         
         #Converts each column to a list
         Date = spTimeserie.ix[:, 'Date'].tolist()
@@ -46,8 +46,8 @@ class SpEnv(gym.Env):
         #Open the weekly and daily data as a merged data structure
         #Get 20 dimensional vectors (close-open) considering 20 past days and 8 dimensional vectors (close-open) 
         #considering 8 weeks
-        self.weekData = MergedDataStructure(delta=8,filename="./dataset/"+MK+"Week.csv")# this DS allows me to obtain previous historical data with different resolution
-        self.dayData = MergedDataStructure(delta=20,filename="./dataset/"+MK+"Day.csv")#  with low computational complexity
+        self.weekData = MergedDataStructure(delta=8,filename="./datasets/"+MK+"Week.csv")# this DS allows me to obtain previous historical data with different resolution
+        self.dayData = MergedDataStructure(delta=20,filename="./datasets/"+MK+"Day.csv")#  with low computational complexity
         
         #Load the data
         self.output=False
