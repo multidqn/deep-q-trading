@@ -41,12 +41,12 @@ On the other hand, the file **utils/plotResults.py** can be used to generate a .
 * Pandas: `pip install pandas`
 
 ## Usage
-The code needs 3 positional parameters to run:<br>
-`python main.py numberOfActions isOnlyShort ensembleFolder`<br>
+The code needs three positional parameters to be correctly executed:<br>
+`python main.py <numberOfActions> <isOnlyShort> <ensembleFolder>`<br>
 <br>
 
 * To run the **FULL** agent you need to run: `python main.py 3 0 ensembleFolder`
 * To run the **ONLY LONG** agent you need to run: `python main.py 2 0 ensembleFolder`
 * To run the **ONLY SHORT** agent you need to run: `python main.py 2 1 ensembleFolder`
 
-the paramenter **ensembleFolder** sets the name of the folder in which you'll get your results
+where the paramenter **ensembleFolder** is used to set the name of the folder in which you'll get your results.
