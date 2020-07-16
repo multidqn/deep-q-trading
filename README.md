@@ -41,10 +41,12 @@ The file **utils/plotResults.py** can be used to get a pdf containing many plots
 * Pandas: `pip install pandas`
 
 ## Usage
-The code needs 2 positional parameters to run:<br>
-`python main.py numberOfActions isOnlyShort`<br>
+The code needs 3 positional parameters to run:<br>
+`python main.py numberOfActions isOnlyShort ensembleFolder`<br>
 <br>
 
-* To run the **FULL** agent you need to run: `python main.py 3 0`
-* To run the **ONLY LONG** agent you need to run: `python main.py 2 0`
-* To run the **ONLY SHORT** agent you need to run: `python main.py 2 1`
+* To run the **FULL** agent you need to run: `python main.py 3 0 ensembleFolder`
+* To run the **ONLY LONG** agent you need to run: `python main.py 2 0 ensembleFolder`
+* To run the **ONLY SHORT** agent you need to run: `python main.py 2 1 ensembleFolder`
+
+the paramenter **ensembleFolder** sets the name of the folder in which you'll get your results
