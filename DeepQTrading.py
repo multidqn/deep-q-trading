@@ -26,8 +26,6 @@ import pandas as pd
 #Library used to manipulate time
 import datetime
 
-#Library used 
-import telegram
 
 #Prefix of the name of the market (S&P500) files used to load the data
 MK="dax"
@@ -47,26 +45,12 @@ class DeepQTrading:
     #nbActions: number of decisions (0-Hold 1-Long 2-Short) 
     #nOutput is the number of walks. We are doing 5 walks.  
     #operationCost: Price for the transaction (we set they are free)
-    #telegramToken: token used for the bot that will send messages
-    #telegramChatID: ID of messager receiver in Telegram
-    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, isOnlyShort, ensembleFolderName, operationCost=0,telegramToken="",telegramChatID=""):
+    def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, isOnlyShort, ensembleFolderName, operationCost=0):
         
         self.isOnlyShort=isOnlyShort
         self.ensembleFolderName=ensembleFolderName
 
-        #If the telegram token for the bot and the telegram id of the receiver are empty, try to send a message 
-        #otherwise print error
-        if(telegramToken!="" and telegramChatID!=""):
-            self.chatID=telegramChatID
-            self.telegramOutput=True
-            try:
-                self.bot = telegram.Bot(token=telegramToken)
-            except:
-                print("Error with Telegram Bot")
         
-        #If they are empty, set the telegram bot flag to false
-        else:
-            self.telegramOutput=False
 
         #Define the policy, explorations, actions and model as received by parameters
         self.policy = EpsGreedyQPolicy()
@@ -180,9 +164,6 @@ class DeepQTrading:
                 "testShortPrec\n")
 
 
-            #Send to the receiver the current walk
-            if(self.telegramOutput):
-                self.bot.send_message(chat_id=self.chatID, text="Walk "+str(iteration + 1 )+" started.")
             
             #Empty the memory and agent
             del(self.memory)

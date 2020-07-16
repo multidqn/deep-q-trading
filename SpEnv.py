@@ -9,7 +9,7 @@ import pandas
 #datetime is the library used to manipulate time and date
 from datetime import datetime
 #Library created by Tonio to merge data used as feature vectors
-from MergedDataStructure import MergedDataStructure
+from mergedDataStructure import MergedDataStructure
 #Callback is the library used to show metrics 
 import Callback
 

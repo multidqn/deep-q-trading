@@ -4,7 +4,7 @@
 #os.environ["CUDA_VISIBLE_DEVICES"]="0";
 
 #This is the class call for the Agent which will perform the experiment
-from DeepQTrading import DeepQTrading
+from deepQTrading import DeepQTrading
 
 #Date library to manipulate time in the source code
 import datetime
@@ -26,26 +26,20 @@ from rl.agents.dqn import DQNAgent
 from rl.memory import SequentialMemory
 from rl.policy import EpsGreedyQPolicy
 
-#Telegram library used to send feedback about the script being runned
-import telegram
 
 #Library used for showing the exception in the case of error 
 import sys
 
-from telegramSettings import telegramToken
-from telegramSettings import telegramChatID
 #import tensorflow as tf
 #from keras.backend.tensorflow_backend import set_session
 #config = tf.ConfigProto()
 #config.gpu_options.per_process_gpu_memory_fraction = 0.3
 #set_session(tf.Session(config=config))
 
-#Declare Telegram bot to be used
-bot = telegram.Bot(token=telegramToken)
+
 
 #Let's capture the starting time and send it to the destination in order to tell that the experiment started 
 startingTime=datetime.datetime.now()
-bot.send_message(chat_id=telegramChatID, text="Experiment started "+str(datetime.datetime.now()))
 
 #There are three actions possible in the stock market
 #Hold(id 0): do nothing.
@@ -93,26 +87,11 @@ dqt = DeepQTrading(
     end=datetime.datetime(2019,2,28,0,0,0,0),
     nbActions=nb_actions,
     isOnlyShort=isOnlyShort,
-    ensembleFolderName=sys.argv[3],
-    telegramToken=telegramToken,
-    telegramChatID=telegramChatID
+    ensembleFolderName=sys.argv[3]
     )
 
 dqt.run()
-#This part of the code will run the Agent and send a message to the user informing that the experiment has ended
-# or, in the case of an error, it will inform what happened
-try:
-    dqt.run()
-    bot.send_message(chat_id=telegramChatID, text="Experiment ended without errors -- "+str(datetime.datetime.now()))
-except: 
-    bot.send_message(chat_id=telegramChatID, text="Experiment ended with errors -- "+str(datetime.datetime.now()))
-    bot.send_message(chat_id=telegramChatID, text="Exception: " + str(sys.exc_info()[0]))
 
 dqt.end()
 
-#Then, it will send to the destination how long the experiment took
-try:
-    bot.send_message(chat_id=telegramChatID, text="The experiment took "+str(datetime.datetime.now() - startingTime))
-except:
-    print('No connection')
 
