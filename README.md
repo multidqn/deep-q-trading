@@ -17,19 +17,19 @@ The stock market forecasting is one of the most challenging application of machi
 ## Description
 
 #### These files are needed to run the main code:
-* **main.py**: use this to run the code
-* **deepQTrading.py**: here we divide our data in walks and set up our agents
-* **spEnv.py**: the environment for our agents
-* **mergedDataStructure.py**: the data structure we use to create the multi resolution feature vector
-* **callback.py**: a module we use to log all the results
+* **main.py**: the entry point of the application;
+* **deepQTrading.py**: used to organize our data in walks and set up the agents;
+* **spEnv.py**: the environment used for the agents;
+* **mergedDataStructure.py**: the data structure we use to instantiate the multi-resolution feature vector;
+* **callback.py**: a module used to log and trace the results.
 
 #### Other tools:
-* **ensemble.py**: use to get the threshold ensemble from the main agents
-* **splitEnsemble.py**: used to get the final ensemble for the LONG+SHORT agent after running ensemble.py
+* **ensemble.py**: can be used to generate the threshold ensemble from the main agents;
+* **splitEnsemble.py**: can be used to generate the final ensemble for the LONG+SHORT agent (after running ensemble.py).
 
 
-If you want to adapt the code and use it for more markets, you can use the file **utils/parserWeek.py** to create a week resolution dataset.<br>
-The file **utils/plotResults.py** can be used to get a pdf containing many plots, useful to get information during testing of the algorithm.
+If you want to adapt the code and use it for more markets, you can use the file **utils/parserWeek.py**, to create a weekly resolution dataset.<br>
+On the other hand, the file **utils/plotResults.py** can be used to generate a .pdf containing several plots, useful to get information on the testing phase of the algorithm.
 
 
 ## Requirements
